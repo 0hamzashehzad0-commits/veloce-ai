@@ -3,12 +3,70 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ComplaintHub · AI Complaints Officer — Veloce AI FTE-01</title>
-<meta name="description" content="ComplaintHub captures, routes and auto-resolves complaints across web, email and WhatsApp on a 100% audit trail — live in production. The roadmap turns it into an autonomous AI Complaints Officer." />
+<title>ComplaintHub · Autonomous Complaints & Facilities Officer — Veloce AI FTE-01</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png?v=2026" />
+<meta name="description" content="The internal complaint & equipment-fault desk for corporates and industrial operations. Every fault reported, routed and driven to resolution before downtime turns into loss — with a crew of AI FTEs watching the queue 24/7 on a 100% audit trail." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css" />
+<link rel="stylesheet" href="../assets/styles.css?v=42" />
+<style>
+/* ===== ComplaintHub page-scoped components ===== */
+
+/* Problem strip */
+.pains{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.1rem; margin-top:1.6rem; }
+@media (max-width:820px){ .pains{ grid-template-columns:1fr; } }
+.pain{ padding:1.5rem 1.4rem; }
+.pain .x{ width:38px; height:38px; border-radius:10px; display:grid; place-items:center; font-size:1.05rem;
+  background:rgba(233,75,208,.1); border:1px solid rgba(233,75,208,.32); margin-bottom:.9rem; }
+.pain h4{ font-size:1.02rem; margin-bottom:.35rem; }
+.pain p{ color:var(--fog); font-size:.9rem; }
+
+/* Ops console mock */
+.oc{ display:grid; grid-template-columns:1.5fr 1fr; gap:1rem; }
+@media (max-width:900px){ .oc{ grid-template-columns:1fr; } }
+.oc-panel{ padding:1.2rem 1.3rem; }
+.oc-head{ display:flex; align-items:center; gap:.55rem; font-family:var(--font-mono); font-size:.74rem;
+  color:var(--muted); letter-spacing:.06em; padding-bottom:.9rem; margin-bottom:.6rem; border-bottom:1px solid var(--line); }
+.oc-head .grow{ margin-left:auto; color:var(--cyan); }
+.oc-tk{ display:grid; grid-template-columns:1fr auto; gap:.3rem .8rem; align-items:center; padding:.85rem 0; border-bottom:1px dashed var(--line); }
+.oc-tk:last-child{ border-bottom:none; }
+.oc-tk .a{ font-weight:600; font-size:.94rem; }
+.oc-tk .m{ font-family:var(--font-mono); font-size:.72rem; color:var(--muted); }
+.chip{ justify-self:end; font-family:var(--font-mono); font-size:.66rem; padding:.22rem .55rem; border-radius:6px; white-space:nowrap; }
+.chip.hot{ background:rgba(233,75,208,.14); color:#ff9fe9; border:1px solid rgba(233,75,208,.35); }
+.chip.warn{ background:rgba(255,180,84,.14); color:var(--amber); border:1px solid rgba(255,180,84,.35); }
+.chip.ok{ background:rgba(47,230,224,.12); color:#9af6f2; border:1px solid rgba(47,230,224,.35); }
+.sla{ grid-column:1 / -1; height:5px; border-radius:4px; background:rgba(255,255,255,.07); overflow:hidden; margin-top:.15rem; }
+.sla > i{ display:block; height:100%; border-radius:4px; }
+.sla > i.b{ background:var(--ai-grad); box-shadow:0 0 8px var(--cyan); }
+.sla > i.r{ background:linear-gradient(90deg,var(--amber),var(--magenta)); box-shadow:0 0 8px var(--magenta); }
+.oc-alert{ display:flex; gap:.7rem; align-items:flex-start; margin-top:1rem; padding:.85rem 1rem; border-radius:12px;
+  background:rgba(124,92,255,.1); border:1px solid rgba(124,92,255,.35); }
+.oc-alert .sp{ flex:none; width:28px; height:28px; border-radius:8px; background:var(--ai-grad); display:grid; place-items:center; font-size:.8rem; box-shadow:var(--glow-v); }
+.oc-alert .who{ font-family:var(--font-mono); font-size:.64rem; color:var(--violet); letter-spacing:.08em; }
+.oc-alert p{ font-size:.86rem; color:var(--fog); margin-top:.15rem; } .oc-alert p b{ color:#fff; }
+.oc-side{ display:flex; flex-direction:column; gap:1rem; }
+.stat-row{ display:flex; align-items:baseline; justify-content:space-between; padding:.55rem 0; border-bottom:1px dashed var(--line); }
+.stat-row:last-child{ border-bottom:none; }
+.stat-row .k{ font-size:.82rem; color:var(--fog); }
+.stat-row .v{ font-family:var(--font-display); font-weight:700; font-size:1.15rem; }
+.part{ display:grid; grid-template-columns:1fr auto; gap:.2rem .6rem; padding:.5rem 0; }
+.part .n{ font-size:.86rem; } .part .s{ font-family:var(--font-mono); font-size:.7rem; color:var(--muted); }
+.part .bar{ grid-column:1/-1; height:5px; border-radius:4px; background:rgba(255,255,255,.07); overflow:hidden; margin-top:.15rem; }
+.part .bar > i{ display:block; height:100%; background:linear-gradient(90deg,var(--amber),var(--magenta)); border-radius:4px; }
+
+/* AI FTE crew */
+.crew{ display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-top:1.6rem; }
+@media (max-width:960px){ .crew{ grid-template-columns:1fr 1fr; } }
+@media (max-width:520px){ .crew{ grid-template-columns:1fr; } }
+.agent{ padding:1.5rem 1.35rem; }
+.agent .ic{ width:44px; height:44px; border-radius:11px; background:var(--glass-grad); border:1px solid var(--line-2);
+  display:grid; place-items:center; font-size:1.25rem; margin-bottom:1rem; box-shadow:inset 0 0 20px -8px var(--violet); }
+.agent h4{ font-size:1.05rem; margin-bottom:.3rem; }
+.agent .role{ font-family:var(--font-mono); font-size:.66rem; color:var(--cyan); letter-spacing:.06em; margin-bottom:.6rem; }
+.agent p{ color:var(--fog); font-size:.88rem; }
+</style>
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -18,7 +76,7 @@
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="../index.html"><span class="mark">✦</span> Veloce <span class="ai">FTE-01</span></a>
+    <a class="brand" href="../index.html"><img src="../assets/veloce-word-2026.png?v=2026" alt="Veloce-AI" style="height:24px;width:auto;vertical-align:middle" /> <span class="ai">FTE-01</span></a>
     <div class="nav-links">
       <a href="../index.html#fleet">The Fleet</a>
       <a href="../lab.html">The Lab</a>
@@ -33,26 +91,87 @@
 <header class="hero p-hero">
   <div class="wrap">
     <a class="p-back" href="../index.html#fleet">← Back to the fleet</a>
-    <span class="eyebrow reveal">FTE-01 · AI Complaints Officer</span>
+    <span class="eyebrow reveal">FTE-01 · Autonomous Complaints &amp; Facilities Officer</span>
     <h1 class="reveal">Complaint<span class="ai-grad-text">Hub</span></h1>
-    <p class="sub reveal">Every complaint, every channel, one audited system of record — <b>live in production today</b>, on $0 infrastructure. The roadmap turns the resolution desk into an autonomous agent.</p>
+    <p class="sub reveal">The internal complaint &amp; equipment-fault desk for corporates and industrial operations. Every fault reported, routed and driven to resolution <b>before downtime becomes loss</b> — with a crew of AI FTEs watching the queue 24/7 on a 100% audit trail.</p>
     <div class="p-badges reveal">
-      <span class="tag tag-prod"><span class="dot"></span> Production · real customer</span>
-      <span class="tag">nandospak.com/cms</span>
-      <span class="tag">CX / Case management</span>
+      <span class="tag tag-prod"><span class="dot"></span> In production</span>
+      <span class="tag">Facilities &amp; equipment ops</span>
+      <span class="tag">RBAC · 100% audit</span>
       <span class="ai-badge">AI-native 2/5</span>
       <span class="ai-badge">FTE-fit 4/5</span>
     </div>
     <div class="spec-grid reveal">
-      <div class="spec glass"><div class="k">Maturity</div><div class="v">Live<small>Serving a national brand</small></div></div>
-      <div class="spec glass"><div class="k">Channels</div><div class="v">3+<small>Web · Email · WhatsApp</small></div></div>
-      <div class="spec glass"><div class="k">Audit trail</div><div class="v">100%<small>Every action on record</small></div></div>
-      <div class="spec glass"><div class="k">Infra cost</div><div class="v">$0<small>Always-Free cloud</small></div></div>
+      <div class="spec glass"><div class="k">Monitoring</div><div class="v">24/7<small>AI crew on the queue</small></div></div>
+      <div class="spec glass"><div class="k">SLA</div><div class="v">Auto<small>Escalate before breach</small></div></div>
+      <div class="spec glass"><div class="k">Accountability</div><div class="v">100%<small>Every action on record</small></div></div>
+      <div class="spec glass"><div class="k">Intake</div><div class="v">3+<small>Web · Email · WhatsApp</small></div></div>
     </div>
   </div>
 </header>
 
-<section style="padding-top:3rem">
+<section style="padding-top:2.5rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:.4rem">
+      <span class="eyebrow">Why it matters</span>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.6rem);margin:.8rem 0 0">A stuck complaint is a <span class="ai-grad-text">stuck machine.</span></h2>
+    </div>
+    <div class="pains">
+      <div class="pain glass reveal"><div class="x">⏱</div><h4>Silent backlogs</h4><p>A fault report sits in someone's inbox for days. The chiller, the line, the lift — down while the ticket ages.</p></div>
+      <div class="pain glass reveal"><div class="x">👁</div><h4>Zero accountability</h4><p>No one can see which handler let a critical ticket breach SLA. Negligence hides in email threads.</p></div>
+      <div class="pain glass reveal"><div class="x">📦</div><h4>Blind on spares</h4><p>The technician arrives — the part isn't on the shelf. A one-hour fix becomes a three-day outage.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:1rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:1.4rem"><span class="eyebrow">See it working · the ops console</span></div>
+    <div class="oc reveal">
+      <div class="oc-panel glass">
+        <div class="oc-head"><span class="dot"></span> Live fault queue <span class="grow">4 open · 1 at risk</span></div>
+        <div class="oc-tk">
+          <div><div class="a">Chiller #3 — cold store</div><div class="m">Karachi plant · HVAC · P1</div></div>
+          <span class="chip hot">SLA 00:41 left</span>
+          <div class="sla"><i class="r" style="width:86%"></i></div>
+        </div>
+        <div class="oc-tk">
+          <div><div class="a">Passenger lift — Tower B</div><div class="m">HQ · Elevators · P2</div></div>
+          <span class="chip warn">Tech dispatched</span>
+          <div class="sla"><i class="r" style="width:58%"></i></div>
+        </div>
+        <div class="oc-tk">
+          <div><div class="a">AHU vibration — Floor 4</div><div class="m">Office · HVAC · P3</div></div>
+          <span class="chip ok">On track</span>
+          <div class="sla"><i class="b" style="width:28%"></i></div>
+        </div>
+        <div class="oc-alert">
+          <span class="sp">✦</span>
+          <div>
+            <div class="who">MONITOR FTE · autonomous alert</div>
+            <p><b>Chiller #3</b> has breached SLA twice this month and handler response is 3× slower than team median. <b>Escalated to Ops Manager</b> — repair-vs-replace brief attached.</p>
+          </div>
+        </div>
+      </div>
+      <div class="oc-side">
+        <div class="oc-panel glass">
+          <div class="oc-head">This week</div>
+          <div class="stat-row"><span class="k">Faults resolved</span><span class="v ai-grad-text">128</span></div>
+          <div class="stat-row"><span class="k">Median time-to-fix</span><span class="v">4.2h</span></div>
+          <div class="stat-row"><span class="k">SLA breaches caught early</span><span class="v">17</span></div>
+        </div>
+        <div class="oc-panel glass">
+          <div class="oc-head">Parts &amp; inventory · low stock</div>
+          <div class="part"><span class="n">Compressor relay</span><span class="s">2 left</span><div class="bar"><i style="width:15%"></i></div></div>
+          <div class="part"><span class="n">HVAC filter (24×24)</span><span class="s">6 left</span><div class="bar"><i style="width:30%"></i></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="prose reveal" style="margin-top:1.4rem"><p>One console for every site, asset and department — faults land from anywhere, route to the right owner, and stay on a clock the whole team can see. The AI crew reads the same stream a supervisor would, and never looks away.</p></div>
+  </div>
+</section>
+
+<section style="padding-top:2rem">
   <div class="wrap">
     <div class="section-head left reveal" style="margin-bottom:2rem">
       <span class="eyebrow">What runs today vs. the roadmap</span>
@@ -62,59 +181,69 @@
         <h3><span class="dot"></span> Running today</h3>
         <div class="csub">Verified, in production — demo any of it live.</div>
         <ul class="feat">
-          <li><span class="ck">✦</span><span><b>Omnichannel intake</b> — web form, Gmail (OAuth) and a dedicated WhatsApp bridge feed one unified queue.</span></li>
-          <li><span class="ck">✦</span><span><b>Rule-based routing</b> — deterministic routing by category, subcategory and location to the right owner.</span></li>
-          <li><span class="ck">✦</span><span><b>SLA auto-close</b> — configurable, time-based auto-resolution triggers.</span></li>
-          <li><span class="ck">✦</span><span><b>RBAC + 100% audit</b> — role-guarded middleware, HTTP-only sessions, Zod on every input, full system of record.</span></li>
-          <li><span class="ck">✦</span><span><b>Analytics + $0 deploy</b> — Recharts dashboards, one-command deploy to Oracle Always-Free, self-updating replica.</span></li>
+          <li><span class="ck">✦</span><span><b>Prompt reporting, any channel</b> — staff or a site log a fault from web, email or WhatsApp; it lands in one unified queue in seconds.</span></li>
+          <li><span class="ck">✦</span><span><b>Rule-based routing</b> — deterministic routing by asset, category and location to the right owner or technician.</span></li>
+          <li><span class="ck">✦</span><span><b>SLA auto-escalation</b> — configurable time-based triggers escalate and auto-close so nothing quietly ages out.</span></li>
+          <li><span class="ck">✦</span><span><b>Accountability + 100% audit</b> — role-guarded access, HTTP-only sessions, Zod-validated input and a full system of record: every touch on a ticket, on the record.</span></li>
+          <li><span class="ck">✦</span><span><b>Dashboards + $0 deploy</b> — resolution-time and backlog analytics, one-command deploy to Always-Free cloud, self-updating replica.</span></li>
         </ul>
       </div>
       <div class="card road glass reveal">
         <h3><span class="dot amber"></span> On the roadmap</h3>
-        <div class="csub">The autonomous layer — not shipped, never demoed as live.</div>
+        <div class="csub">The autonomous AI crew — not shipped, never demoed as live.</div>
         <ul class="feat">
-          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>AI triage agent</b> — classify category, severity, sentiment and route; fall back to today's rules on low confidence.</span></li>
-          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Resolution copilot</b> — drafts responses and next steps from similar resolved cases, with the SLA clock surfaced.</span></li>
-          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>CX analyst</b> — reads the stream, flags an emerging issue (a bad batch, a problem location), writes weekly trend briefs.</span></li>
-          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Multi-tenant SaaS + billing</b> — tenant isolation, self-serve onboarding and metering to sell beyond the first customer.</span></li>
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>AI triage &amp; monitoring</b> — classify asset, fault type and severity; watch the queue 24/7 and alert before an SLA breaks. Falls back to today's rules on low confidence.</span></li>
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Negligence radar</b> — flag handlers whose tickets stall or breach SLA, so supervisors see the pattern instead of the excuse.</span></li>
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Resolution copilot</b> — drafts fix steps and repair-vs-replace calls from similar resolved cases, with the SLA clock surfaced.</span></li>
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Parts &amp; ops analyst</b> — links faults to inventory, warns on low spares before a job, and briefs weekly downtime &amp; cost trends. Plus multi-tenant + billing.</span></li>
         </ul>
-        <p class="honest-note">Honesty note: sentiment UI scaffolding exists but isn't wired. Treat triage / copilot / predictive analytics as vision.</p>
+        <p class="honest-note">Honesty note: the AI crew is the vision layer. Sentiment/triage scaffolding exists but isn't wired — treat monitoring, negligence radar, copilot and predictive analytics as roadmap.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section style="padding-top:0">
+<section style="padding-top:1rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:.4rem">
+      <span class="eyebrow">The roadmap · the autonomous crew</span>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.6rem);margin:.8rem 0 0">Four AI FTEs, <span class="ai-grad-text">one queue, never off.</span></h2>
+      <p style="color:var(--fog);margin-top:.7rem;max-width:60ch">Where a shift ends, the crew doesn't. Each agent owns a slice of the complaint lifecycle — labeled roadmap, human-in-command before anything moves.</p>
+    </div>
+    <div class="crew">
+      <div class="agent glass reveal"><div class="ic">🛰</div><h4>Triage FTE</h4><div class="role">CLASSIFY · ROUTE</div><p>Reads every incoming fault, tags asset, type and severity, and routes to the right owner in seconds.</p></div>
+      <div class="agent glass reveal"><div class="ic">🔔</div><h4>Monitor FTE</h4><div class="role">WATCH · ALERT</div><p>Never blinks. Detects SLA-breach risk and neglected tickets, and escalates the costly ones before they bite.</p></div>
+      <div class="agent glass reveal"><div class="ic">🛠</div><h4>Copilot FTE</h4><div class="role">RESOLVE · ADVISE</div><p>Drafts fix steps and repair-or-replace calls from past resolutions, so technicians arrive already briefed.</p></div>
+      <div class="agent glass reveal"><div class="ic">📊</div><h4>Analyst FTE</h4><div class="role">PREDICT · PROTECT</div><p>Ties faults to parts &amp; inventory, warns on failing assets, and briefs the downtime &amp; cost trends weekly.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:2rem">
   <div class="wrap">
     <div class="replaces glass reveal">
       <div>
         <span class="eyebrow">The role it replaces</span>
-        <h3>A 24/7 complaints triage desk.</h3>
-        <p>Reading, tagging, routing and first-draft replies across every channel — the always-on grind of a CX/complaints team — running around the clock with human approval before any customer-facing send.</p>
+        <h3>A 24/7 facilities complaint desk.</h3>
+        <p>Logging faults, chasing owners, escalating before SLAs break and keeping every asset accountable — the always-on grind of a maintenance-coordination team, run around the clock with a human in command before any dispatch.</p>
       </div>
-      <div class="big ai-grad-text">1–2<small>FTEs of triage · ~16–24 hrs/day</small></div>
+      <div class="big ai-grad-text">1–2<small>FTEs of coordination · ~16–24 hrs/day</small></div>
     </div>
   </div>
 </section>
 
-<section>
+<section style="padding-top:1rem">
   <div class="wrap">
-    <div class="section-head left reveal" style="margin-bottom:1.6rem"><span class="eyebrow">The 60-second showcase</span></div>
-    <div class="demo-card glass reveal">
-      <div class="demo-head"><span class="dot"></span> live dashboard · nandospak.com/cms</div>
-      <div class="demo-body">
-        <div class="demo-step"><div class="sn">01</div><div class="st">File a complaint <b>via WhatsApp</b> — a customer message lands in the bridge.</div></div>
-        <div class="demo-step"><div class="sn">02</div><div class="st">Watch it <b>route, track and auto-resolve</b> on the live dashboard — every step on the audit trail.</div></div>
-        <div class="demo-step"><div class="sn">03</div><div class="st"><b>Roadmap preview (labeled):</b> the AI triage agent classifies category, severity and sentiment in real time before routing.</div></div>
-      </div>
+    <div class="section-head left reveal" style="margin-bottom:1.4rem"><span class="eyebrow">The business case</span></div>
+    <div class="demo-card glass reveal" style="padding:2rem">
+      <p class="prose" style="margin:0"><b style="color:#fff">Faulty equipment doesn't wait for a free agent.</b> Every hour a fault sits unrouted is an hour of lost output, idle staff and a repair bill that grows. ComplaintHub makes the queue impossible to ignore — timely resolution, visible accountability and spares ready before the technician arrives — so a small problem stays a small problem, and operations keep running.</p>
     </div>
-    <div class="prose reveal"><p>ComplaintHub is the credibility anchor of the fleet — the one product already live, with a real customer, on infrastructure that costs nothing to run. A clean system of record plus a complete audit trail is the ideal substrate to bolt an agentic layer onto, which is exactly what the roadmap does: turn a proven workflow into an autonomous AI Complaints Officer without betting the deal on AI you can't yet demo.</p></div>
   </div>
 </section>
 
 <section style="padding-top:0">
   <div class="wrap"><div class="pager">
-    <a href="../index.html#fleet">← All five FTEs</a>
+    <a href="../index.html#fleet">← All six FTEs</a>
     <a href="personal-ai-employee.html">Next · FTE-02 AI Back-Office Clerk →</a>
   </div></div>
 </section>
@@ -126,6 +255,6 @@
   </div></div>
 </footer>
 
-<script src="../assets/app.js"></script>
+<script src="../assets/app.js?v=42"></script>
 </body>
 </html>

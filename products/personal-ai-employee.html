@@ -4,21 +4,155 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Personal AI Employee · AI Back-Office Clerk — Veloce AI FTE-02</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png?v=2026" />
 <meta name="description" content="A 24/7 AI back-office clerk that watches Gmail, WhatsApp and Xero, triages work, and turns a plain-English request into a charted Excel finance report." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/styles.css" />
+<link rel="stylesheet" href="../assets/styles.css?v=42" />
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+
+<!-- ===== Personal_E intro overlay (plays on load, then reveals this page as-is) ===== -->
+<style id="pei-style">
+  :root{ --pei-glow-v:rgba(124,92,255,.55); }
+  html.pei-lock,body.pei-lock{overflow:hidden!important}
+  #pei-intro{position:fixed;inset:0;z-index:9999;overflow:hidden;display:grid;place-items:center;
+    background:radial-gradient(120vw 90vh at 50% 40%,#0A0C1C 0%,#05060F 60%,#03040A 100%);
+    transition:opacity .8s ease,visibility .8s}
+  #pei-intro.pei-gone{opacity:0;visibility:hidden;pointer-events:none}
+  #pei-intro .pei-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  #pei-intro .pei-bg span{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5}
+  #pei-intro .pei-bg .b1{width:52vw;height:52vw;left:-12vw;top:-14vw;background:radial-gradient(circle,rgba(124,92,255,.5),transparent 65%)}
+  #pei-intro .pei-bg .b2{width:46vw;height:46vw;right:-12vw;top:6vw;background:radial-gradient(circle,rgba(47,230,224,.32),transparent 65%)}
+  #pei-intro .pei-bg .b3{width:40vw;height:40vw;left:30vw;bottom:-18vw;background:radial-gradient(circle,rgba(233,75,208,.28),transparent 65%)}
+  #pei-cards{position:absolute;inset:0;z-index:1}
+  .pei-ncard{position:absolute;left:50%;top:50%;width:224px;background:rgba(255,255,255,.045);
+    border:1px solid rgba(150,160,255,.14);border-radius:14px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start;
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    box-shadow:0 18px 44px -22px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05);
+    font-family:'Inter',system-ui,sans-serif;
+    transform:translate(-50%,-50%) translate(var(--x),var(--y)) scale(.55);opacity:0;will-change:transform,opacity;
+    transition:transform .85s cubic-bezier(.16,1,.3,1),opacity .55s ease}
+  .pei-ncard .ic{width:32px;height:32px;border-radius:8px;flex:none;display:grid;place-items:center;font-size:15px;color:#fff;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 4px 10px -4px rgba(0,0,0,.6)}
+  .pei-ncard .tx{min-width:0}
+  .pei-ncard .app{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#62648A;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1px}
+  .pei-ncard .tt{font-weight:700;font-size:12.5px;letter-spacing:-.01em;color:#F3F3FB;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pei-ncard .st{font-size:11px;color:#9FA0C2;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pei-ncard .liv{position:absolute;top:9px;right:10px;width:6px;height:6px;border-radius:50%;background:#2FE6E0;box-shadow:0 0 8px #2FE6E0}
+  #pei-intro[data-phase="scatter"] .pei-ncard,#pei-intro[data-phase="converge"] .pei-ncard{opacity:1}
+  #pei-intro[data-phase="scatter"] .pei-ncard{transform:translate(-50%,-50%) translate(var(--x),var(--y)) scale(1)}
+  #pei-intro[data-phase="converge"] .pei-ncard{transform:translate(-50%,-50%) translate(calc(var(--x)*.05),calc(var(--y)*.05)) scale(.22);
+    opacity:0;transition:transform 1.05s cubic-bezier(.7,0,.3,1),opacity .95s ease .1s}
+  .pei-halo{position:absolute;left:50%;top:50%;width:560px;height:560px;border-radius:50%;z-index:2;
+    transform:translate(-50%,-50%) scale(.2);opacity:0;will-change:transform,opacity;
+    background:radial-gradient(circle,var(--pei-glow-v) 0%,rgba(47,230,224,.18) 40%,transparent 70%)}
+  #pei-intro[data-phase="converge"] .pei-halo{opacity:1;transform:translate(-50%,-50%) scale(.85);transition:opacity .8s ease,transform 1.1s cubic-bezier(.16,1,.3,1)}
+  #pei-intro[data-phase="orb"] .pei-halo,#pei-intro[data-phase="reveal"] .pei-halo{opacity:1;transform:translate(-50%,-50%) scale(1);animation:peihalo 3.4s ease-in-out infinite}
+  @keyframes peihalo{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.9}50%{transform:translate(-50%,-50%) scale(1.1);opacity:1}}
+  .pei-orb{position:absolute;left:50%;top:50%;width:176px;height:176px;border-radius:50%;z-index:3;
+    transform:translate(-50%,-50%) scale(.2);opacity:0;will-change:transform,opacity;
+    background:radial-gradient(130% 130% at 34% 26%,#FFFFFF 0%,#CFC2FF 34%,#7C5CFF 66%,#3A2A80 100%);
+    box-shadow:0 24px 70px -18px rgba(124,92,255,.7),0 0 0 6px rgba(124,92,255,.16),0 0 70px 8px var(--pei-glow-v),inset 0 0 30px -6px rgba(255,255,255,.5);
+    display:grid;place-items:center}
+  .pei-orb::before{content:"";position:absolute;inset:6px;border-radius:50%;padding:2px;
+    background:linear-gradient(120deg,#2FE6E0,#38BDF8 32%,#7C5CFF 66%,#E94BD0);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.9}
+  #pei-intro[data-phase="converge"] .pei-orb{opacity:1;transform:translate(-50%,-50%) scale(.7);transition:transform .9s cubic-bezier(.34,1.56,.64,1) .25s,opacity .5s ease .25s}
+  #pei-intro[data-phase="orb"] .pei-orb,#pei-intro[data-phase="reveal"] .pei-orb{opacity:1;transform:translate(-50%,-50%) scale(1);transition:transform .8s cubic-bezier(.34,1.56,.64,1)}
+  #pei-intro[data-phase="reveal"] .pei-orb{transform:translate(-50%,-50%) translateY(-4px) scale(.9);transition:transform .9s cubic-bezier(.16,1,.3,1)}
+  .pei-orb svg{width:98px;height:98px;position:relative;z-index:1;filter:drop-shadow(0 2px 6px rgba(20,10,60,.5))}
+  .pei-orb .blink{transform-origin:center;animation:peiblink 4.2s ease-in-out infinite}
+  @keyframes peiblink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+  .pei-skip{position:fixed;right:18px;bottom:16px;z-index:10000;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;
+    color:#9FA0C2;background:rgba(255,255,255,.06);border:1px solid rgba(150,160,255,.26);border-radius:999px;padding:7px 14px;cursor:pointer;transition:opacity .4s,background .2s}
+  .pei-skip:hover{background:rgba(255,255,255,.1)}
+  .pei-skip.pei-gone{opacity:0;pointer-events:none}
+  @media(prefers-reduced-motion:reduce){.pei-ncard,.pei-halo,.pei-orb{transition:none!important;animation:none!important}}
+</style>
 </head>
 <body>
+
+<!-- ===== Personal_E intro overlay ===== -->
+<div id="pei-intro" data-phase="load">
+  <div class="pei-bg"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+  <div id="pei-cards"></div>
+  <div class="pei-halo"></div>
+  <div class="pei-orb">
+    <svg viewBox="0 0 100 100" fill="none" stroke="#1a1240" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <g class="blink"><path d="M24 40 l10 -9 l10 9"/><path d="M56 40 l10 -9 l10 9"/></g>
+      <path d="M50 42 l-7 18 l9 0"/><path d="M36 68 q14 14 28 0"/>
+    </svg>
+  </div>
+</div>
+<div class="pei-skip" onclick="peiFinish()">skip intro ›</div>
+<script>
+(function(){
+  var intro=document.getElementById('pei-intro');
+  if(!intro) return;
+  var root=document.documentElement; root.classList.add('pei-lock'); document.body.classList.add('pei-lock');
+  var APPS={gmail:{c:'#EA4335',e:'✉',n:'Gmail'},slack:{c:'#611f69',e:'#',n:'Slack'},stripe:{c:'#635BFF',e:'S',n:'Stripe'},
+    notion:{c:'#000',e:'N',n:'Notion'},linear:{c:'#5E6AD2',e:'◪',n:'Linear'},cal:{c:'#1a73e8',e:'▦',n:'Calendar'},
+    wa:{c:'#25D366',e:'✆',n:'WhatsApp'},asana:{c:'#F06A6A',e:'✓',n:'Asana'},out:{c:'#0078D4',e:'✉',n:'Outlook'},
+    xero:{c:'#13B5EA',e:'x',n:'Xero'},jira:{c:'#0052CC',e:'◆',n:'Jira'},hub:{c:'#FF7A59',e:'⬡',n:'HubSpot'},
+    drive:{c:'#1FA463',e:'△',n:'Drive'},zoom:{c:'#2D8CFF',e:'▷',n:'Zoom'}};
+  var CARDS=[['gmail','47 unread emails','Sorted, drafted, flagged'],['stripe','Payment failed','Invoice follow-up queued'],
+    ['cal','Calendar conflict','2 meetings overlap — fixed'],['slack','@here standup now','Summary posted to thread'],
+    ['notion','Q3 planning note','Action items extracted'],['linear','Review PR #482','High-priority issue flagged'],
+    ['asana','Landing page copy','Overdue task summarized'],['out','Flight changed','SFO→JFK delayed 2 hrs'],
+    ['xero','Invoice #2231 overdue','Reminder sent to vendor'],['wa','DM from Haneen','Partner deck ready to draft'],
+    ['gmail','Travel receipt','Filed under reimbursement'],['stripe','3 from Mike Torres','Proposal attached'],
+    ['cal','Lunch with investor','Reservation found nearby'],['notion','Recruiter from Stripe','Low priority, archived'],
+    ['linear','Safari login bug','Assigned to auth owner'],['slack','Payroll run due','Draft prepared for approval'],
+    ['asana','Vendor contract','Ready for e-signature'],['out','Standup notes','Zoom link sent to thread'],
+    ['jira','SEV-2 incident','Owner paged, timeline built'],['hub','New lead: Acme Co','Enriched + routed to sales'],
+    ['drive','Board deck v4','Shared with 6 people'],['zoom','Recording ready','Summary + action items sent'],
+    ['gmail','Refund request','Policy checked, approved'],['xero','Expenses reconciled','32 receipts matched'],
+    ['cal','Reschedule 1:1','Moved to Thu 3pm'],['notion','Weekly report','Auto-compiled from 5 tools'],
+    ['wa','Supplier message','Quote logged to sheet'],['jira','Sprint groomed','12 tickets triaged'],
+    ['hub','Deal → Closed Won','Contract stage updated'],['out','Exec follow-up','Reply drafted for review'],
+    ['asana','Onboarding checklist','New hire tasks created'],['drive','Contract redline','Changes summarized'],
+    ['linear','Release notes','Drafted from merged PRs'],['slack','#general — @here','All-hands moved to 4pm'],
+    ['zoom','No-show flagged','Reminder + reschedule sent'],['xero','P&L export','Charted Excel report built']];
+  var wrap=document.getElementById('pei-cards');
+  var W=window.innerWidth,H=window.innerHeight;
+  var cellW=W<700?168:244, cellH=W<700?96:116;
+  var cols=Math.max(3,Math.ceil(W/cellW)+1), rows=Math.max(4,Math.ceil(H/cellH)+1);
+  var jx=cellW*0.26, jy=cellH*0.30, i=0;
+  for(var r=0;r<rows;r++){ for(var c=0;c<cols;c++){
+    var d=CARDS[i%CARDS.length], a=APPS[d[0]]||{c:'#7C5CFF',e:'•',n:'App'};
+    var x=(c-(cols-1)/2)*cellW+((i*53)%(jx*2)-jx);
+    var y=(r-(rows-1)/2)*cellH+((i*37)%(jy*2)-jy);
+    var el=document.createElement('div'); el.className='pei-ncard';
+    el.style.setProperty('--x',x.toFixed(0)+'px'); el.style.setProperty('--y',y.toFixed(0)+'px');
+    el.style.transitionDelay=Math.min(Math.hypot(x,y)/1600,.9).toFixed(2)+'s';
+    el.innerHTML='<span class="liv"></span><div class="ic" style="background:'+a.c+'">'+a.e+'</div>'+
+      '<div class="tx"><div class="app">'+a.n+'</div><div class="tt">'+d[1]+'</div><div class="st">'+d[2]+'</div></div>';
+    wrap.appendChild(el); i++;
+  }}
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, done=false;
+  window.peiFinish=function(){ if(done)return; done=true; intro.setAttribute('data-phase','reveal');
+    intro.classList.add('pei-gone'); document.querySelector('.pei-skip').classList.add('pei-gone');
+    root.classList.remove('pei-lock'); document.body.classList.remove('pei-lock');
+    setTimeout(function(){ if(intro.parentNode) intro.parentNode.removeChild(intro); },850); };
+  function set(p){ if(!done) intro.setAttribute('data-phase',p); }
+  if(reduce){ peiFinish(); }
+  else{ requestAnimationFrame(function(){
+    setTimeout(function(){set('scatter');},120);
+    setTimeout(function(){set('converge');},2700);
+    setTimeout(function(){set('orb');},4100);
+    setTimeout(function(){ peiFinish(); },6100);
+  }); }
+})();
+</script>
+
 <div class="void-base"></div>
 <div class="orbs"><span class="orb c1"></span><span class="orb c2"></span><span class="orb c3"></span></div>
 <div class="grid-bg"></div>
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="../index.html"><span class="mark">✦</span> Veloce <span class="ai">FTE-02</span></a>
+    <a class="brand" href="../index.html"><img src="../assets/veloce-word-2026.png?v=2026" alt="Veloce-AI" style="height:24px;width:auto;vertical-align:middle" /> <span class="ai">FTE-02</span></a>
     <div class="nav-links">
       <a href="../index.html#fleet">The Fleet</a>
       <a href="../lab.html">The Lab</a>
@@ -124,6 +258,6 @@
   </div></div>
 </footer>
 
-<script src="../assets/app.js"></script>
+<script src="../assets/app.js?v=42"></script>
 </body>
 </html>

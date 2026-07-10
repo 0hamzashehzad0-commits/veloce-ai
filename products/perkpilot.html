@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PerkPilot · AI Card-Deals Concierge — Veloce AI FTE-07</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png?v=2026" />
+<meta name="description" content="PerkPilot turns a customer's card into the best co-branded food deal in a tap. A deployed BIN→discount lookup today, being rebuilt around an autonomous agent that keeps every bank-card campaign live, validated and instant." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css?v=42" />
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+<div class="void-base"></div>
+<div class="orbs"><span class="orb c1"></span><span class="orb c2"></span><span class="orb c3"></span></div>
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="../index.html"><img src="../assets/veloce-word-2026.png?v=2026" alt="Veloce-AI" style="height:24px;width:auto;vertical-align:middle" /> <span class="ai">FTE-07</span></a>
+    <div class="nav-links">
+      <a href="../index.html#fleet">The Fleet</a>
+      <a href="../lab.html">The Lab</a>
+      <a href="../index.html#platform">Platform</a>
+      <span class="nav-clock"><span class="dot"></span> MVP · deployed</span>
+    </div>
+    <div class="nav-cta"><a href="../index.html#final" class="btn btn-primary" style="padding:.6rem 1.2rem">Deploy an FTE</a></div>
+    <div class="nav-burger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<header class="hero p-hero">
+  <div class="wrap">
+    <a class="p-back" href="../index.html#fleet">← Back to the fleet</a>
+    <span class="eyebrow reveal">FTE-07 · AI Card-Deals Concierge</span>
+    <h1 class="reveal"><span class="ai-grad-text">PerkPilot</span></h1>
+    <p class="sub reveal">Every card-linked food deal, cracked in a tap. Enter a customer's card and instantly see the exact bank-card discount that applies <b>today</b> — a deployed lookup app now, being rebuilt around an autonomous agent that keeps every co-branded campaign <b>live, validated and instant</b>.</p>
+    <div class="p-badges reveal">
+      <span class="tag tag-live"><span class="dot"></span> MVP · deployed</span>
+      <span class="tag">Fintech · card deals</span>
+      <span class="tag">Next.js · serverless Postgres</span>
+      <span class="ai-badge">AI-native 0.5/5</span>
+      <span class="ai-badge">FTE-fit 3/5</span>
+    </div>
+    <div class="spec-grid reveal">
+      <div class="spec glass"><div class="k">Card → deal</div><div class="v">&lt;1s<small>BIN to live discount</small></div></div>
+      <div class="spec glass"><div class="k">Data model</div><div class="v">3-tier<small>deal → entry → BIN</small></div></div>
+      <div class="spec glass"><div class="k">Access</div><div class="v">OAuth<small>admin whitelist</small></div></div>
+      <div class="spec glass"><div class="k">Deploy</div><div class="v">Live<small>serverless Postgres</small></div></div>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:3rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:2rem"><span class="eyebrow">What runs today vs. the roadmap</span></div>
+    <div class="cols">
+      <div class="card live glass reveal">
+        <h3><span class="dot"></span> Running today</h3>
+        <div class="csub">A deployed lookup app — deterministic, no AI yet.</div>
+        <ul class="feat">
+          <li><span class="ck">✦</span><span><b>Type a card, see the deal</b> — staff enter a card BIN (4–8 digits) and instantly get the eligible discount by bank × network × tier, on a date selector that defaults to today.</span></li>
+          <li><span class="ck">✦</span><span><b>Admin console</b> — full create/edit for deals and the reference data (banks, card networks, tiers), with weekday windows and discount caps.</span></li>
+          <li><span class="ck">✦</span><span><b>Customer offers page</b> — a public, QR-ready one-pager showing the day's active deals, cached for the counter.</span></li>
+          <li><span class="ck">✦</span><span><b>Real accounts &amp; analytics</b> — Google sign-in with an admin whitelist, plus per-page view analytics.</span></li>
+          <li><span class="ck">✦</span><span><b>Deployed with live campaign data</b> — running on serverless Postgres, loaded each seasonal and quarterly window from the bank's alliance files.</span></li>
+        </ul>
+      </div>
+      <div class="card road glass reveal">
+        <h3><span class="dot amber"></span> On the roadmap</h3>
+        <div class="csub">The autonomous Deal-Ops FTE we're building.</div>
+        <ul class="feat">
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Self-serve ingestion</b> — an agent watches an inbox/drive for the bank-alliance PDF/XLSX and extracts every deal, window, BIN and discount — retiring the hand-coded import each campaign.</span></li>
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Validate every BIN</b> — resolve inconsistent bank/card naming and check each BIN against a real IIN reference, flagging mismatches before they cause a wrong discount at the till.</span></li>
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Reconcile &amp; publish</b> — diff against live deals, propose adds/edits/expiries for one-click human approval, then publish and refresh the QR page.</span></li>
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Customer concierge</b> — answer "what's the best card deal this Friday?" and surface the single best eligible deal in the moment.</span></li>
+        </ul>
+        <p class="honest-note">Honesty note: there is <em>no AI in the product today</em> — it's a deterministic BIN→discount lookup. Everything in this column is the roadmap.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="replaces glass reveal">
+      <div>
+        <span class="eyebrow">The role it replaces</span>
+        <h3>A payments-ops analyst wrangling deal files.</h3>
+        <p>Each campaign, someone reads bank-alliance PDFs and Excel, normalizes inconsistent naming, extracts hundreds of BINs, and a developer hand-codes an import — the whole ingest-and-normalize loop an agent would own.</p>
+      </div>
+      <div class="big ai-grad-text">~0.15<small>FTE + recurring dev time · target</small></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:1.6rem"><span class="eyebrow">The 60-second showcase</span></div>
+    <div class="demo-card glass reveal">
+      <div class="demo-head"><span class="dot"></span> veloce://fte-07 — card-to-deal</div>
+      <div class="demo-body">
+        <div class="demo-step"><div class="sn">01</div><div class="st">A diner's card BIN is entered at the counter (or scanned from their card).</div></div>
+        <div class="demo-step"><div class="sn">02</div><div class="st">In <b>under a second</b>, staff see the exact live discount for that card — bank, network, tier and <b>%</b> — so it's charged correctly.</div></div>
+        <div class="demo-step"><div class="sn">03</div><div class="st">The roadmap agent keeps that list correct: it <b>ingests the next bank file, validates every BIN, and publishes</b> after one human approval.</div></div>
+      </div>
+    </div>
+    <div class="prose reveal"><p>PerkPilot is the honest inverse of the fleet's AI-first units: the <em>product</em> — a fast, deployed card-to-discount lookup with a real admin console and customer offers page — already works and has real users, but it carries no model. The FTE is the layer above it: an autonomous Deal-Ops analyst that ends the quarterly PDF-and-Excel scramble, validates every BIN, and keeps the right deal in front of every diner. That upgrade path is the build.</p></div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap"><div class="pager">
+    <a href="vocalytic.html">← FTE-06 AI Conversation &amp; Quality Analyst</a>
+    <a href="../index.html#fleet">All FTEs →</a>
+  </div></div>
+</section>
+
+<footer>
+  <div class="wrap"><div class="foot-bottom" style="border:none;margin:0;padding:0">
+    <span>© 2026 Veloce AI · PerkPilot dossier</span>
+    <span>Fleet online · <span data-clock>00:00:00</span> · <span class="dot" style="display:inline-block"></span></span>
+  </div></div>
+</footer>
+
+<script src="../assets/app.js?v=42"></script>
+</body>
+</html>

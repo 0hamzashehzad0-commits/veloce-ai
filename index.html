@@ -5,21 +5,49 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Veloce AI — The Restless Workforce · Autonomous FTEs that never sleep</title>
 <meta name="description" content="Veloce AI builds autonomous Full-Time-Equivalents — AI agents that run your back office, inbox, security and customer operations 24/7. Native AI, not bolted on." />
-<link rel="icon" type="image/png" href="assets/favicon.png?v=38" />
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2026" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css?v=40" />
-<!-- Active skin — index.html ONLY; other pages keep the original theme.
-     Swap this one line to change the landing look:
-       assets/purpledelight.css   = deep-violet "PurpleDelight" style (active)
-       assets/mystyle-ideal.css   = warm editorial "Ideal" style
-       assets/orangefishsea.css   = navy/orange OrangeFishSea style
-     (delete the line entirely to revert index.html to the original dark theme) -->
-<link rel="stylesheet" href="assets/purpledelight.css?v=38" />
-<!-- Veloce brand alignment layer — real brand sheet (yellow/purple), custom
-     icons + illustrations. Loaded last so it owns the final look. -->
-<link rel="stylesheet" href="assets/veloce-brand.css?v=10" />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&family=Manrope:wght@200;300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css?v=42" />
+<!-- Brand skin (index + contact): PurpleDelight base + the 2026 Veloce-AI brand layer,
+     merged into one sheet — blue/violet spectrum, new logo, lab background, looping process. -->
+<link rel="stylesheet" href="assets/veloce-skin.css?v=2026c" />
+<!-- Landing page only: apply Style #2 (veloce-skin.css:21, purple mono) across the brand
+     system — gradient text, buttons/components, AND the page background. -->
+<style id="landing-brand-grad">
+  :root{
+    --ai-grad:linear-gradient(120deg,#7C3AED 0%,#9D5CFF 45%,#C084FC 100%);
+    --ai-grad-2:linear-gradient(135deg,#7C3AED,#A855F7 60%,#C084FC);
+  }
+  /* page background → Style #2 purple-mono */
+  .void-base{ background:linear-gradient(160deg,#7C3AED 0%,#9D5CFF 45%,#C084FC 100%) !important; }
+  .grid-bg{ opacity:.18; }
+
+  /* --- the word "machine": darker so it reads against the purple bg --- */
+  .machine-dk{ background:none !important; -webkit-text-fill-color:#180b3f !important; color:#180b3f !important; }
+
+  /* --- ALL non-FTE cards & boxes fit the purple theme.  FTE fleet uses `.unit.glass`
+         and `.fl-card`/`.fte-*`, all excluded here, so no FTE card is touched. --- */
+  .glass:not(.unit){
+    background:linear-gradient(180deg,rgba(22,11,52,.74),rgba(22,11,52,.60)) !important;
+    border-color:rgba(199,170,255,.26) !important;
+    box-shadow:0 26px 64px -30px rgba(20,8,60,.75) !important;
+    transition:transform .25s ease,box-shadow .3s ease,border-color .25s ease !important;
+  }
+  .glass:not(.unit)::before{ background:linear-gradient(140deg,rgba(199,170,255,.5),rgba(124,58,237,.16) 42%,transparent 72%) !important; }
+  .glass:not(.unit):hover{ transform:translateY(-4px); border-color:rgba(226,206,255,.55) !important;
+    box-shadow:0 34px 74px -26px rgba(124,58,237,.6) !important; }
+  .glass:not(.unit) h3{ color:#F4EFFF !important; }
+  .glass:not(.unit) p{ color:#DAD0F4 !important; }
+
+  /* --- buttons, pills, tags, strips to fit (primary already uses the purple gradient) --- */
+  .btn-ghost{ background:rgba(255,255,255,.09) !important; border-color:rgba(226,206,255,.42) !important; color:#fff !important; }
+  .btn-ghost:hover{ background:rgba(255,255,255,.17) !important; border-color:#E2CEFF !important; }
+  .pill{ background:rgba(22,11,52,.5) !important; border-color:rgba(199,170,255,.26) !important; color:#EBE3FF !important; }
+  .compliance{ background:rgba(22,11,52,.4) !important; border-color:rgba(199,170,255,.2) !important; }
+  .tag{ border-color:rgba(226,206,255,.34) !important; }
+</style>
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <!-- Hero text reveal: word-by-word rise from a clipped baseline (hero h1 + sub only).
      Text-only entrance — no font/color change; resting state is plain text.
@@ -33,6 +61,176 @@
     .reveal-text .rword{ transform:none; transition:none; }
   }
 </style>
+<!-- Stage A: lead-capture form embedded in the #final section (scoped, on-brand) -->
+<style id="lead-form-fx">
+  .lead-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:1.6rem;align-items:start;text-align:left;margin-top:1.8rem}
+  @media(max-width:840px){.lead-grid{grid-template-columns:1fr}}
+  .lead-form{padding:1.7rem 1.6rem;display:flex;flex-direction:column;gap:1rem}
+  .lf-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media(max-width:560px){.lf-row{grid-template-columns:1fr}}
+  .lf-field{display:flex;flex-direction:column;gap:.4rem}
+  .lf-field label{font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--fog,#9aa3b2);font-family:var(--font-mono,monospace)}
+  .lf-field input,.lf-field select,.lf-field textarea{
+    width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);
+    border-radius:12px;padding:.72rem .85rem;color:#fff;font:inherit;font-size:.95rem;
+    transition:border-color .15s,box-shadow .15s;outline:none}
+  .lf-field textarea{resize:vertical;min-height:96px}
+  .lf-field input:focus,.lf-field select:focus,.lf-field textarea:focus{
+    border-color:var(--accent,#7a5cff);box-shadow:0 0 0 3px rgba(122,92,255,.18)}
+  .lf-field select option{background:#0b0d14;color:#fff}
+  .lf-note{font-size:.8rem;color:var(--muted,#6b7280);font-family:var(--font-mono,monospace);margin:0}
+  .lead-form .btn{justify-content:center;width:100%;margin-top:.2rem}
+  .form-status{display:none;font-size:.92rem;padding:.8rem 1rem;border-radius:12px;margin:0}
+  .form-status.ok{display:block;background:rgba(47,230,224,.1);border:1px solid rgba(47,230,224,.4);color:#7af5ee}
+  .form-status.err{display:block;background:rgba(237,28,36,.1);border:1px solid rgba(237,28,36,.4);color:#ff9aa0}
+  .demo-card{padding:1.7rem 1.5rem;display:flex;flex-direction:column;gap:1rem}
+  .demo-card h3{margin:.2rem 0 0}
+  .demo-card ul{list-style:none;margin:.4rem 0 0;padding:0;display:flex;flex-direction:column;gap:.6rem}
+  .demo-card li{display:flex;gap:.6rem;align-items:flex-start;font-size:.94rem;color:var(--fog,#c4cad6)}
+  .demo-card li .ck{color:var(--accent,#7a5cff)}
+  .hp{position:absolute;left:-9999px;opacity:0;height:0;width:0}
+</style>
+<!-- "See it working" — three live product surfaces (scoped, on-brand) -->
+<style id="atwork-fx">
+  .atwork{ padding-block:clamp(2.4rem,7vh,5rem); }
+  .aw-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem;
+    margin-top:clamp(1.8rem,4vh,3rem); align-items:stretch; }
+  @media(max-width:980px){ .aw-grid{ grid-template-columns:1fr; max-width:540px; margin-inline:auto; } }
+  .aw-card{ border-radius:16px; padding:0; overflow:hidden; display:flex; flex-direction:column;
+    min-height:344px; }
+  .aw-head{ display:flex; align-items:center; gap:.5rem; padding:.7rem .9rem; border-bottom:1px solid var(--line);
+    font-family:var(--font-mono,monospace); font-size:.71rem; letter-spacing:.03em; color:var(--fog);
+    background:rgba(255,255,255,.025); }
+  .aw-head .dot{ width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); flex:none; }
+  .aw-head .spacer{ margin-left:auto; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; font-size:.62rem; }
+  .aw-body{ padding:.95rem; flex:1; display:flex; flex-direction:column; gap:.55rem; }
+  .aw-foot{ padding:.6rem .9rem; border-top:1px solid var(--line); font-family:var(--font-mono,monospace);
+    font-size:.68rem; color:var(--muted); display:flex; align-items:center; gap:.45rem; }
+  .aw-foot .dot{ width:6px; height:6px; border-radius:50%; background:var(--cyan); flex:none; }
+  .aw-cap{ text-align:center; margin-top:1.4rem; font-family:var(--font-mono,monospace); font-size:.7rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  /* 1 · telemetry log */
+  .aw-log{ font-family:var(--font-mono,monospace); font-size:.73rem; line-height:1.5; gap:.5rem; }
+  .aw-line{ display:flex; gap:.5rem; opacity:0; transform:translateY(6px); transition:opacity .4s ease, transform .4s ease; }
+  .aw-line.in{ opacity:1; transform:none; }
+  .aw-line .t{ color:var(--muted); flex:none; }
+  .aw-line .k{ flex:none; width:52px; font-weight:700; }
+  .aw-line .k.watch{ color:#7DD3FC; } .aw-line .k.reason{ color:var(--violet); }
+  .aw-line .k.act{ color:var(--cyan); } .aw-line .k.report{ color:#86EFAC; }
+  .aw-line .v{ color:var(--fog); } .aw-line .v b{ color:#fff; }
+  /* 2 · inbox thread */
+  .aw-thread{ gap:.5rem; }
+  .aw-msg{ max-width:88%; padding:.58rem .8rem; border-radius:13px; font-size:.83rem; line-height:1.42;
+    opacity:0; transform:translateY(8px); transition:opacity .45s ease, transform .45s ease; }
+  .aw-msg.in{ opacity:1; transform:none; }
+  .aw-msg.cust{ align-self:flex-start; background:rgba(255,255,255,.06); border:1px solid var(--line); border-bottom-left-radius:3px; color:var(--fog); }
+  .aw-msg.agent{ align-self:flex-end; background:linear-gradient(135deg,rgba(79,141,255,.20),rgba(122,92,255,.20));
+    border:1px solid rgba(122,92,255,.4); border-bottom-right-radius:3px; color:#EAF1FF; }
+  .aw-msg.agent small{ display:block; margin-top:.3rem; font-family:var(--font-mono,monospace); font-size:.64rem; color:#a9b2d8; }
+  .aw-typing{ align-self:flex-end; display:none; gap:4px; padding:.5rem .7rem; }
+  .aw-typing.show{ display:inline-flex; }
+  .aw-typing span{ width:6px; height:6px; border-radius:50%; background:var(--violet); animation:awblink 1s infinite; }
+  .aw-typing span:nth-child(2){ animation-delay:.2s; } .aw-typing span:nth-child(3){ animation-delay:.4s; }
+  @keyframes awblink{ 0%,100%{opacity:.3} 50%{opacity:1} }
+  .aw-controls{ display:flex; gap:.5rem; margin-top:auto; opacity:0; transition:opacity .4s ease; }
+  .aw-controls.in{ opacity:1; }
+  .aw-btn{ font-size:.74rem; padding:.4rem .85rem; border-radius:9px; font-family:var(--font-mono,monospace); }
+  .aw-btn.approve{ background:var(--ai-grad-2); color:#fff; }
+  .aw-btn.approve.pulse{ animation:awpulse 1.7s ease-out 1; }
+  @keyframes awpulse{ 0%{box-shadow:0 0 0 0 rgba(122,92,255,.55)} 100%{box-shadow:0 0 0 15px rgba(122,92,255,0)} }
+  .aw-btn.edit{ background:transparent; border:1px solid var(--line-2); color:var(--fog); }
+  /* 3 · ops dashboard */
+  .aw-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:.55rem; }
+  .aw-stat{ border:1px solid var(--line); border-radius:10px; padding:.65rem .4rem; text-align:center; background:rgba(255,255,255,.02); }
+  .aw-stat b{ display:block; font-family:var(--font-display); font-weight:700; font-size:1.45rem;
+    background:var(--ai-grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; }
+  .aw-stat small{ font-family:var(--font-mono,monospace); font-size:.6rem; letter-spacing:.03em; color:var(--muted); text-transform:uppercase; }
+  .aw-audit{ margin-top:.7rem; display:flex; flex-direction:column; gap:.4rem; }
+  .aw-row{ display:flex; align-items:center; gap:.45rem; font-family:var(--font-mono,monospace); font-size:.71rem;
+    color:var(--fog); padding:.45rem .6rem; border:1px solid var(--line); border-radius:8px;
+    opacity:0; transform:translateX(-6px); transition:opacity .4s ease, transform .4s ease; }
+  .aw-row.in{ opacity:1; transform:none; }
+  .aw-row .ok{ color:#86EFAC; margin-left:auto; }
+  .aw-badges{ display:flex; gap:.45rem; margin-top:.7rem; flex-wrap:wrap; }
+  .aw-badge{ font-family:var(--font-mono,monospace); font-size:.63rem; padding:.28rem .55rem; border-radius:7px; letter-spacing:.03em; }
+  .aw-badge.live{ color:#04121A; background:var(--cyan); }
+  .aw-badge.road{ color:#CBB8FF; border:1px solid rgba(122,92,255,.5); background:rgba(122,92,255,.08); }
+</style>
+<!-- FTE fleet card v3 — ported from resources/card_sample.html (UX Pilot base).
+     Tailwind Play CDN + FontAwesome, scoped to the .fte-card component.
+     Preflight is DISABLED so Tailwind's base reset can't disturb the hand-rolled site CSS. -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    corePlugins: { preflight: false },
+    theme: { extend: {
+      fontFamily: { sans:['Manrope','sans-serif'], display:['Space Grotesk','sans-serif'] },
+      colors: { brand: {
+        cyan:'#00F5FF', blue:'#4F8DFF', violet:'#7A5CFF', magenta:'#B45CFF',
+        amber:'#FFB454', lime:'#32D74B',
+      } },
+    } },
+  };
+</script>
+<style id="fte-card-fx">
+  /* glassmorphism surface + gradient text, lifted verbatim from resources/card_sample.html */
+  .glass-panel{ background:rgba(18,20,28,.40); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,.05); }
+  .text-gradient{ background:linear-gradient(to right,#00F5FF,#4F8DFF,#7A5CFF,#B45CFF);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; }
+  .fte-featured a{ text-decoration:none; }
+  /* one FTE solution per screen — fill the viewport so the next unit stays below the fold */
+  .fte-featured{ min-height:calc(100vh - 4.5rem); display:flex; flex-direction:column; justify-content:center;
+    margin-bottom:2.5rem; scroll-margin-top:5rem; }
+  @media (max-width:860px){ .fte-featured{ min-height:0; } }
+</style>
+<!-- FTE solution card — card_design1.png design on the ComplaintHub dark-glass surface.
+     Card surface + on-card text go dark/light; content panels & chips stay light so the
+     extracted dark-line icons/illustrations remain crisp. -->
+<style id="fte-light-fx">
+  .fl-card{ background:rgba(16,18,26,.55); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.09); border-radius:28px;
+    box-shadow:0 34px 80px -36px rgba(0,0,0,.75); width:100%; color:#e7ebf2; }
+  .fl-h{ color:#f2f5fa; }
+  .fl-sub{ color:#98a2b3; }
+  .fl-body{ color:#c0c8d4; }
+  .fl-panel{ background:rgba(255,255,255,.032); border:1px solid rgba(255,255,255,.05); border-radius:18px;
+    backdrop-filter:blur(13px); -webkit-backdrop-filter:blur(13px); }
+  .fl-panel .fl-h{ color:#f2f5fa; }
+  .fl-panel .fl-body{ color:#b9c1cd; }
+  .fl-headchip{ background:#f3f5f7; border:1px solid #eceef1; border-radius:22px; }
+  .fl-badge{ background:#fff; border:1px solid #eceef1; box-shadow:0 6px 16px rgba(20,24,31,.10); }
+  .fl-circle{ background:#eef1f4; border:1px solid #e6e9ee; }
+  .fl-pill{ background:#b7ea3f; color:#20361a; }
+  .fl-green{ color:#69a80f; }
+  .fl-lime{ color:#9fdd28; }
+  .fl-tile,.fl-mini{ background:#fff; border:1px solid #eceef1; border-radius:12px; }
+  .fl-kbar{ background:#e4e7eb; border-radius:3px; }
+  .fl-conn{ width:2px; height:14px; margin-left:46px;
+    background:repeating-linear-gradient(rgba(255,255,255,.3) 0 3px, transparent 3px 6px); }
+  /* v2 — "Meet ComplaintHub" colour scheme (cyan→violet on the same layout/images) */
+  .fl-topbar{ position:absolute; top:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg,#00F5FF,#4F8DFF,#7A5CFF,#B45CFF); border-radius:28px 28px 0 0; }
+  .fte-v2 .fl-pill{ background:linear-gradient(90deg,#00F5FF,#8f6bff); color:#06121b; }
+  .fte-v2 .fl-lime,.fte-v2 .fl-green{ color:#3dd3ff; }
+  /* glassy, very-low-contrast circles/badges (mirrors the original's subtle circles) */
+  .fte-v2 .fl-circle{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); }
+  .fte-v2 .fl-badge{ background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.13); box-shadow:none; }
+</style>
+<!-- Fleet: scroll settles one FTE at a time; each FTE swaps in (fade + rise + scale),
+     both directions. Desktop only; disabled for reduced-motion and no-JS. -->
+<style id="fte-swap-fx">
+  @media (min-width:861px) and (prefers-reduced-motion:no-preference){
+    html{ scroll-snap-type:y proximity; }
+    .fte-featured{ scroll-snap-align:center; scroll-snap-stop:always; }
+    .fte-slide{ opacity:0; transform:translateY(52px) scale(.972);
+      transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+      will-change:opacity,transform; }
+    .fte-slide.fte-in{ opacity:1; transform:none; }
+  }
+</style>
+<noscript><style>.fte-slide{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body class="fx">
 
@@ -40,8 +238,8 @@
      Later: drop a <video class="intro-video" autoplay muted playsinline> into .intro-inner. -->
 <div id="intro" role="dialog" aria-label="Intro — click to enter">
   <div class="intro-inner">
-    <img class="intro-logo" src="assets/veloce-yellow.png?v=1" alt="Veloce" />
-    <div class="intro-tag">Intro Here</div>
+    <img class="intro-logo" src="assets/veloce-logo-2026.png?v=2026" alt="Veloce-AI" />
+    <div class="intro-tag">Autonomous Intelligence. Always On.</div>
     <div class="intro-hint">Click anywhere to enter</div>
   </div>
 </div>
@@ -72,7 +270,7 @@
 <!-- NAV -->
 <nav>
   <div class="wrap">
-    <a class="brand" href="index.html"><img class="brand-word" src="assets/veloce-yellow.png?v=1" alt="Veloce" /><img class="brand-sym" src="assets/veloce-v.png?v=1" alt="Veloce" /></a>
+    <a class="brand" href="index.html"><img class="brand-word" src="assets/veloce-word-2026.png?v=2026" alt="Veloce-AI" /><img class="brand-sym" src="assets/veloce-icon-2026.png?v=2026" alt="Veloce-AI" /></a>
     <div class="nav-links">
       <a href="#engine">How it works</a>
       <a href="#fleet">The Fleet</a>
@@ -89,9 +287,9 @@
 <!-- HERO -->
 <header class="hero hero-split">
   <span class="greet greet-corner" data-greet>
-    <svg class="greet-sun" viewBox="0 0 24 24" fill="none" stroke="#FFD43B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M4 17.4a8 8 0 0 1 16 0" fill="#FFD43B" stroke="none"/>
-      <line x1="2.4" y1="17.4" x2="21.6" y2="17.4" stroke="#FFD43B"/>
+    <svg class="greet-sun" viewBox="0 0 24 24" fill="none" stroke="#FFB454" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 17.4a8 8 0 0 1 16 0" fill="#FFB454" stroke="none"/>
+      <line x1="2.4" y1="17.4" x2="21.6" y2="17.4" stroke="#FFB454"/>
       <line x1="12" y1="3.2" x2="12" y2="6.2"/>
       <line x1="4.6" y1="6" x2="6.6" y2="8"/>
       <line x1="19.4" y1="6" x2="17.4" y2="8"/>
@@ -103,12 +301,12 @@
     <div class="hero-copy">
       <div class="hero-masthead reveal">
         <div class="mh-row">
-          <img class="masthead-logo" src="assets/veloce-yellow.png?v=1" alt="Veloce" />
+          <img class="masthead-logo" src="assets/veloce-logo-2026.png?v=2026" alt="Veloce-AI — Autonomous Intelligence. Always On." />
           <div class="veloce-pron" aria-hidden="true">
             <div class="pron-track">
               <span class="pron-text"><b class="pron-word">veh-LOH-cheh</b> — the Italian way of saying Fast, Swift, Efficient</span>
               <svg class="ferrari" viewBox="0 0 66 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M3 18c3-6 9-7 16-7l7-4c4-2 11-1 15 3l13 2c4 1 6 3 6 6l-1 2H4z" fill="#FFCC00"/>
+                <path d="M3 18c3-6 9-7 16-7l7-4c4-2 11-1 15 3l13 2c4 1 6 3 6 6l-1 2H4z" fill="#4F8DFF"/>
                 <path d="M27 11l6-4c3-1 8-1 11 2l2 3z" fill="#0B0D12" opacity=".5"/>
                 <path d="M6 12c4-2 9-2 13-2" stroke="#FFF1A8" stroke-width="1.4" stroke-linecap="round" opacity=".8"/>
                 <circle cx="18" cy="19" r="5" fill="#111418"/><circle cx="18" cy="19" r="2" fill="#9AA3AD"/>
@@ -117,9 +315,8 @@
             </div>
           </div>
         </div>
-        <img class="masthead-tagline" src="assets/veloce-tagline.png?v=38" alt="Autonomous Intelligence. Always On." />
       </div>
-      <h1 class="reveal-text">Hire the <span class="ai-grad-text">machine.</span><br>The workforce that never sleeps.</h1>
+      <h1 class="reveal-text">Hire the <span class="ai-grad-text machine-dk">machine.</span><br>The workforce that never sleeps.</h1>
       <p class="sub reveal-text">Veloce AI builds autonomous <span class="fte"><i>F</i>ull <i>T</i>ime <i>E</i>quivalent Employees</span> — AI workers that own a job end to end and run 24/7. They triage, decide, act and report; you stay in the loop only where it counts.</p>
       <div class="hero-cta reveal">
         <a href="#fleet" class="btn btn-primary">Meet the fleet <span class="arr">→</span></a>
@@ -140,10 +337,10 @@
           <radialGradient id="botHead" cx="34%" cy="22%" r="92%"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.12" stop-color="#DEE4EB"/><stop offset="0.4" stop-color="#9CA7B2"/><stop offset="0.7" stop-color="#4C545E"/><stop offset="1" stop-color="#1B2026"/></radialGradient>
           <linearGradient id="botMetal" x1="0.2" y1="0" x2="0.55" y2="1"><stop offset="0" stop-color="#F3F6F9"/><stop offset="0.45" stop-color="#A7B0BA"/><stop offset="1" stop-color="#2D333C"/></linearGradient>
           <linearGradient id="botPed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5C646E"/><stop offset="0.5" stop-color="#2A2F37"/><stop offset="1" stop-color="#0C0F13"/></linearGradient>
-          <radialGradient id="botSpot" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#E2FE3C" stop-opacity=".5"/><stop offset="70%" stop-color="#E2FE3C" stop-opacity="0"/></radialGradient>
+          <radialGradient id="botSpot" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#00F5FF" stop-opacity=".5"/><stop offset="70%" stop-color="#00F5FF" stop-opacity="0"/></radialGradient>
           <radialGradient id="botEye" cx="40%" cy="32%" r="70%"><stop offset="0" stop-color="#ffffff"/><stop offset="100%" stop-color="#DCE6EC"/></radialGradient>
           <radialGradient id="botVisor" cx="50%" cy="16%" r="92%"><stop offset="0" stop-color="#2D333C"/><stop offset="0.5" stop-color="#14171C"/><stop offset="1" stop-color="#0A0C0F"/></radialGradient>
-          <radialGradient id="botCheek" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#E2FE3C" stop-opacity=".22"/><stop offset="100%" stop-color="#E2FE3C" stop-opacity="0"/></radialGradient>
+          <radialGradient id="botCheek" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#00F5FF" stop-opacity=".22"/><stop offset="100%" stop-color="#00F5FF" stop-opacity="0"/></radialGradient>
         </defs>
         <ellipse class="bot-spot" cx="180" cy="402" rx="148" ry="34" fill="url(#botSpot)"/>
         <g class="bot-ped">
@@ -160,7 +357,7 @@
           <ellipse cx="180" cy="250" rx="54" ry="12" fill="#0A0C10" opacity=".4"/>
           <g class="bot-head">
             <line x1="180" y1="96" x2="180" y2="70" stroke="#CFD6DD" stroke-width="4" stroke-linecap="round"/>
-            <circle class="bot-anten" cx="180" cy="63" r="8" fill="#E2FE3C"/>
+            <circle class="bot-anten" cx="180" cy="63" r="8" fill="#00F5FF"/>
             <circle cx="100" cy="172" r="18" fill="url(#botMetal)" stroke="#E3E9EF" stroke-opacity=".3"/>
             <circle cx="260" cy="172" r="18" fill="url(#botMetal)" stroke="#E3E9EF" stroke-opacity=".3"/>
             <circle cx="100" cy="172" r="7" fill="#E8EDF2" opacity=".65"/>
@@ -191,20 +388,10 @@
 
 </header>
 
-<!-- TESTIMONIALS · fanned card stack, center card popped up; arrows / click to cycle -->
-<section class="testimonials-section">
-  <div class="wrap"><div class="label reveal">From the field</div></div>
-  <div class="testimonials" aria-label="Testimonials">
-    <div class="t-nav">
-      <button class="t-prev" aria-label="Previous testimonial">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <button class="t-next" aria-label="Next testimonial">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-    </div>
-  </div>
-</section>
+<!-- Testimonials removed 2026-06-30: were placeholder/stock quotes (pravatar avatars,
+     invented names) — off-brand for an honesty-first product. Re-add only with real,
+     attributable customer proof (name + company, ideally a logo strip). -->
+
 
 <!-- HERITAGE STRIP -->
 <div class="compliance">
@@ -317,12 +504,77 @@
   </div>
 </section>
 
+<!-- SEE IT WORKING — three live product surfaces (Watch→Reason→Act→Report) -->
+<section id="atwork" class="atwork">
+  <div class="wrap">
+    <div class="section-head reveal" style="text-align:center;max-width:680px;margin-inline:auto">
+      <span class="eyebrow" style="justify-content:center;display:inline-flex">Live, not slideware</span>
+      <h2>See an FTE <span class="ai-grad-text">at work.</span></h2>
+      <p>The same loop on three real surfaces — the telemetry stream, the human-in-command inbox, and the ops dashboard.</p>
+    </div>
+    <div class="aw-grid">
+
+      <!-- 1 · TELEMETRY LOG -->
+      <div class="aw-card glass reveal" data-aw="log">
+        <div class="aw-head"><span class="dot"></span> veloce://fte-03 · chief-of-staff <span class="spacer">live</span></div>
+        <div class="aw-body aw-log">
+          <div class="aw-line"><span class="t">10:02</span><span class="k watch">WATCH</span><span class="v">inbox: “main lift is stuck between floors”</span></div>
+          <div class="aw-line"><span class="t">10:02</span><span class="k reason">REASON</span><span class="v">classified <b>TOP_URGENT</b> → route: ops on-call</span></div>
+          <div class="aw-line"><span class="t">10:02</span><span class="k act">ACT</span><span class="v">task <b>#4471</b> created · WhatsApp alert sent</span></div>
+          <div class="aw-line"><span class="t">10:31</span><span class="k report">REPORT</span><span class="v">resolved · 6m · audit trail ✓</span></div>
+        </div>
+        <div class="aw-foot"><span class="dot" style="background:#86EFAC"></span> human-in-command · every step logged</div>
+      </div>
+
+      <!-- 2 · HUMAN-IN-COMMAND INBOX -->
+      <div class="aw-card glass reveal" data-aw="thread">
+        <div class="aw-head"><span class="dot"></span> facilities intake · WhatsApp <span class="spacer">drafting</span></div>
+        <div class="aw-body aw-thread">
+          <div class="aw-msg cust">“Chiller #3 in the cold store is down — second time this week.”</div>
+          <div class="aw-typing" data-typing><span></span><span></span><span></span></div>
+          <div class="aw-msg agent" data-draft>Logged as P1, Sara — HVAC tech dispatched to the cold store, ETA 40 min. Repair-vs-replace brief attached.<small>routed on the SLA clock · source: asset #CH-03</small></div>
+          <div class="aw-controls" data-controls>
+            <span class="aw-btn approve">Approve ✓</span>
+            <span class="aw-btn edit">Edit</span>
+          </div>
+        </div>
+        <div class="aw-foot"><span class="dot" style="background:var(--violet)"></span> nothing sends without a human OK</div>
+      </div>
+
+      <!-- 3 · OPS DASHBOARD -->
+      <div class="aw-card glass reveal" data-aw="dash">
+        <div class="aw-head"><span class="dot"></span> facilities officer · today <span class="spacer">acme-ops</span></div>
+        <div class="aw-body">
+          <div class="aw-stats">
+            <div class="aw-stat"><b data-count="142">142</b><small>routed</small></div>
+            <div class="aw-stat"><b data-count="6" data-suffix="m">6m</b><small>avg handle</small></div>
+            <div class="aw-stat"><b data-count="98" data-suffix="%">98%</b><small>within SLA</small></div>
+          </div>
+          <div class="aw-audit">
+            <div class="aw-row">#4471 · Chiller #3 <span class="ok">✓ resolved</span></div>
+            <div class="aw-row">#4470 · Lift Tower-B <span class="ok">✓ repaired</span></div>
+            <div class="aw-row">#4469 · AHU vibration <span class="ok">✓ cleared</span></div>
+          </div>
+          <div class="aw-badges">
+            <span class="aw-badge live">● live: routing + audit</span>
+            <span class="aw-badge road">roadmap: AI triage</span>
+          </div>
+        </div>
+        <div class="aw-foot"><span class="dot"></span> what runs today, split from the roadmap</div>
+      </div>
+
+    </div>
+    <p class="aw-cap reveal">Representative run · synthetic <b>ops</b> sandbox · no real customer data</p>
+  </div>
+</section>
+<noscript><style>.aw-line,.aw-msg,.aw-controls,.aw-row{opacity:1!important;transform:none!important}.aw-typing{display:none!important}</style></noscript>
+
 <!-- FLEET -->
 <section id="fleet">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">The flagship fleet</span>
-      <h2>Five Digital <span class="fte"><i>F</i>ull <i>T</i>ime <i>E</i>quivalent Employees</span>, each replacing a role.</h2>
+      <h2>Seven Digital <span class="fte"><i>F</i>ull <i>T</i>ime <i>E</i>quivalent Employees</span>, each replacing a role.</h2>
       <p>Every unit is shown as the job it does. We separate what runs <b>today</b> from what's on the <b>roadmap</b> — on every page, no exceptions.</p>
     </div>
     <div class="ill-figure ill-fleet-stage reveal" style="margin:0 auto 2.6rem;max-width:760px">
@@ -331,49 +583,318 @@
     </div>
     <div class="fleet-grid">
 
-      <a class="unit glass reveal" href="products/complainthub.html">
-        <div class="unit-top"><div class="unit-badge"><img src="assets/ic-chat.png?v=1" alt="" aria-hidden="true" /></div><div class="unit-code">FTE-01</div></div>
-        <div><div class="unit-role">AI Complaints Officer</div><h3>ComplaintHub</h3></div>
-        <p class="unit-hook">Every complaint, every channel — web, email, WhatsApp — into one audited system of record that routes, tracks and auto-resolves. The portfolio's proof point.</p>
-        <div class="unit-tags"><span class="tag tag-prod"><span class="dot"></span> Live in production</span><span class="tag">CX</span></div>
-        <div class="unit-foot"><span class="unit-score">AI <b>2/5</b> · FTE <b>4/5</b></span><span class="unit-open">Open dossier <span class="arr">→</span></span></div>
-      </a>
+      <div class="fte-featured fte-slide" style="grid-column:1/-1;display:none" data-variant="pae-v1-lime (hidden; kept for reference)">
+        <div class="fl-card p-6 lg:p-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="lg:pr-8 lg:border-r" style="border-color:rgba(255,255,255,.08)">
+              <div class="mb-4"><img src="assets/clerk/header_w.png?v=2" alt="" aria-hidden="true" style="height:104px;width:auto" /></div>
+              <h3 class="fl-h font-display font-bold m-0" style="font-size:2.05rem;line-height:1.04">Personal AI Employee</h3>
+              <p class="fl-sub m-0 mt-1" style="font-size:1.02rem">Meet AI Back-Office Clerk</p>
+              <div class="mt-6">
+                <div class="flex items-center gap-2.5"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:30px;height:30px"><i class="fa-solid fa-exclamation fl-green" style="font-size:.85rem"></i></span><h4 class="fl-h font-display font-bold m-0" style="font-size:1.2rem">Why current ops fail</h4></div>
+                <p class="fl-body leading-relaxed mt-2 m-0" style="font-size:0.92rem">Back-office admin eats the week — inbox triage, chasing tasks, and hand-built reports that are stale by the time they ship.</p>
+              </div>
+              <div class="flex flex-col gap-4 mt-5">
+                <div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><img src="assets/clerk/mail.png?v=2" alt="" aria-hidden="true" style="width:26px;height:26px;object-fit:contain" /></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Inbox overload</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Gmail and WhatsApp pile up; the important thread is buried under noise.</p></div></div>
+                <div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><img src="assets/clerk/board.png?v=2" alt="" aria-hidden="true" style="width:26px;height:26px;object-fit:contain" /></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Work falls through</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Requests get lost between people instead of moving across one board.</p></div></div>
+                <div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><img src="assets/clerk/spreadsheet.png?v=2" alt="" aria-hidden="true" style="width:26px;height:26px;object-fit:contain" /></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Reports by hand</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Finance numbers are copy-pasted into spreadsheets, late and error-prone.</p></div></div>
+              </div>
+            </div>
+            <div class="lg:pl-2">
+              <div class="mb-5"><div class="flex items-center gap-2.5"><img src="assets/clerk/sparkle.png?v=2" alt="" aria-hidden="true" style="width:26px;height:26px" /><h4 class="fl-h font-display font-bold m-0" style="font-size:1.4rem">The autonomous FTE we deploy</h4></div><p class="fl-sub mt-1 m-0" style="font-size:0.95rem">A clerk that clears the inbox and builds the report</p></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><img src="assets/clerk/listen.png?v=2" alt="" aria-hidden="true" style="width:34px;height:34px;object-fit:contain" /></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="fl-h font-semibold" style="font-size:1.15rem">Listen</span><span class="fl-pill font-bold rounded-full leading-none uppercase" style="font-size:0.6rem;padding:3px 8px">on</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Reads Gmail, WhatsApp and the ledger as work arrives.</p></div><div class="flex items-center gap-1.5 flex-none"><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><img src="assets/clerk/gmail.png?v=2" alt="" aria-hidden="true" style="width:20px;height:20px;object-fit:contain" /></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><img src="assets/clerk/whatsapp.png?v=2" alt="" aria-hidden="true" style="width:21px;height:21px;object-fit:contain" /></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><img src="assets/clerk/ledger.png?v=2" alt="" aria-hidden="true" style="width:20px;height:20px;object-fit:contain" /></div></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><img src="assets/clerk/reasoning.png?v=2" alt="" aria-hidden="true" style="width:36px;height:36px;object-fit:contain" /></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="fl-h font-semibold" style="font-size:1.15rem">Reasoning</span><span class="fl-pill font-bold rounded-full leading-none" style="font-size:0.6rem;padding:3px 8px">&#8230;</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Triages each item across a Kanban and plans the report you asked for.</p></div><img src="assets/clerk/kanban.png?v=2" alt="" aria-hidden="true" style="height:62px;width:auto" /></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><img src="assets/clerk/act.png?v=2" alt="" aria-hidden="true" style="width:36px;height:36px;object-fit:contain" /></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="fl-h font-semibold" style="font-size:1.15rem">Act</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Turns a plain-English ask into a charted, multi-sheet Excel report.</p></div><img src="assets/clerk/excel.png?v=2" alt="" aria-hidden="true" style="height:64px;width:auto" /></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><img src="assets/clerk/shield.png?v=2" alt="" aria-hidden="true" style="width:36px;height:36px;object-fit:contain" /></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="fl-h font-semibold" style="font-size:1.15rem">Report</span><span class="fl-pill font-bold rounded-full leading-none" style="font-size:0.6rem;padding:3px 8px">&#8230;</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Every task and figure traceable to its source — no black boxes.</p></div><img src="assets/clerk/report.png?v=2" alt="" aria-hidden="true" style="height:70px;width:auto" /></div>
+              <div class="flex items-center justify-between gap-3 mt-5"><div class="fl-panel flex items-center gap-2" style="padding:8px 15px"><img src="assets/clerk/audit.png?v=2" alt="" aria-hidden="true" style="height:22px;width:auto" /><span class="fl-h font-semibold" style="font-size:0.92rem">100% audit</span></div><a href="products/personal-ai-employee.html" class="group inline-flex items-center gap-1.5 font-semibold fl-lime pr-1" style="text-decoration:none;font-size:0.9rem">Explore this FTE <i class="fa-solid fa-arrow-right text-xs transition-transform duration-500 ease-out group-hover:translate-x-1.5"></i></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <a class="unit glass reveal" href="products/personal-ai-employee.html">
-        <div class="unit-top"><div class="unit-badge"><img src="assets/ic-growth.png?v=1" alt="" aria-hidden="true" /></div><div class="unit-code">FTE-02</div></div>
-        <div><div class="unit-role">AI Back-Office Clerk</div><h3>Personal AI Employee</h3></div>
-        <p class="unit-hook">Watches Gmail, WhatsApp and Xero; triages work across a Kanban; and turns a plain-English request into a charted, multi-sheet Excel finance report — while you sleep.</p>
-        <div class="unit-tags"><span class="tag tag-live">MVP · real OAuth</span><span class="tag">Back-office</span></div>
-        <div class="unit-foot"><span class="unit-score">AI <b>3/5</b> · FTE <b>4/5</b></span><span class="unit-open">Open dossier <span class="arr">→</span></span></div>
-      </a>
+      <div class="fte-featured fte-slide" style="grid-column:1/-1">
+        <div class="fl-card fte-v2 relative p-6 lg:p-8">
+          <div class="fl-topbar"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="lg:pr-8 lg:border-r" style="border-color:rgba(255,255,255,.08)">
+              <div class="mb-4 relative inline-flex items-end" style="height:92px;gap:2px"><i class="fa-solid fa-headset " style="font-size:4.3rem;line-height:1;color:#5ad6ff"></i><i class="fa-solid fa-screwdriver-wrench " style="font-size:2.3rem;line-height:1;color:#b7a6ff;margin-left:-8px;margin-bottom:6px"></i></div>
+              <h3 class="fl-h font-display font-bold m-0" style="font-size:2.05rem;line-height:1.04"><span class="text-gradient">ComplaintHub</span></h3>
+              <p class="fl-sub m-0 mt-1" style="font-size:1.02rem">Meet AI Complaints & Facilities Officer</p>
+              <div class="mt-6">
+                <div class="flex items-center gap-2.5"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:30px;height:30px"><i class="fa-solid fa-exclamation fl-green" style="font-size:.85rem"></i></span><h4 class="fl-h font-display font-bold m-0" style="font-size:1.2rem">Why current ops fail</h4></div>
+                <p class="fl-body leading-relaxed mt-2 m-0" style="font-size:0.92rem">When a facility or system goes down, manual routing guarantees delays, lost context and breached SLAs.</p>
+              </div>
+              <div class="flex flex-col gap-4 mt-5"><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-clock " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Silent backlogs</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">A fault sits in an inbox for days — the chiller, line or lift down while the ticket ages.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-user-xmark " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Zero accountability</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">No one can see which handler let a critical ticket breach its SLA.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-box-open " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Blind on spares</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">The technician arrives on site, but the spare part isn't on the shelf.</p></div></div></div>
+            </div>
+            <div class="lg:pl-2">
+              <div class="mb-5"><div class="flex items-center gap-2.5"><i class="fa-solid fa-star" style="color:#8fd41a;font-size:1.35rem"></i><h4 class="fl-h font-display font-bold m-0" style="font-size:1.4rem">The autonomous FTE we deploy</h4></div><p class="fl-sub mt-1 m-0" style="font-size:0.95rem">One agent owns the whole loop — 24/7</p></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-regular fa-eye " style="color:#22d3ee;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#22d3ee">Watch</span><span class="fl-pill font-bold rounded-full leading-none uppercase" style="font-size:0.6rem;padding:3px 8px">on</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Catches <span class="text-white font-medium">&quot;Main lift is stuck between floors&quot;</span> the moment it lands.</p></div><div class="flex items-center gap-1.5 flex-none"><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-brands fa-whatsapp " style="color:#25D366;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-regular fa-envelope " style="color:#7fb0ff;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-globe " style="color:#b79bff;font-size:1.05rem"></i></div></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-microchip " style="color:#4F8DFF;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#4F8DFF">Reasoning</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Classifies it <span class="text-white font-medium">critical severity · equipment fault</span> and picks the owner.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-list-check " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-bolt " style="color:#a78bfa;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#a78bfa">Act</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Opens <span class="text-white font-medium">ticket #4471</span>, dispatches on-call and alerts on WhatsApp.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-ticket " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-chart-line " style="color:#c084fc;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#c084fc">Report</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem"><span class="text-white font-medium">142 routed · 6m avg · 98% within SLA</span> — every step logged.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-chart-column " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="flex items-center justify-between gap-3 mt-5">
+                <div class="fl-panel flex items-center gap-2" style="padding:8px 15px"><i class="fa-solid fa-shield-halved" style="color:#37d4a7;font-size:1.05rem"></i><span class="fl-h font-semibold" style="font-size:0.92rem">100% audit</span></div>
+                <a href="products/complainthub.html" class="group inline-flex items-center gap-1.5 font-semibold fl-lime pr-1" style="text-decoration:none;font-size:0.9rem">Explore this FTE <i class="fa-solid fa-arrow-right text-xs transition-transform duration-500 ease-out group-hover:translate-x-1.5"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <a class="unit glass reveal" href="products/aria-assistant.html">
-        <div class="unit-top"><div class="unit-badge"><img src="assets/ic-bot.png?v=1" alt="" aria-hidden="true" /></div><div class="unit-code">FTE-03</div></div>
-        <div><div class="unit-role">AI Chief of Staff</div><h3>Aria — Personal Assistant</h3></div>
-        <p class="unit-hook">Watches two inboxes and WhatsApp 24/7, classifies every message, drafts replies in <em>your</em> voice, and opens, chases and auto-closes the tasks you delegate.</p>
-        <div class="unit-tags"><span class="tag tag-live">Deployed MVP</span><span class="tag">Comms</span></div>
-        <div class="unit-foot"><span class="unit-score">AI <b>4/5</b> · FTE <b>4/5</b></span><span class="unit-open">Open dossier <span class="arr">→</span></span></div>
-      </a>
+      <div class="fte-featured fte-slide" style="grid-column:1/-1">
+        <div class="fl-card fte-v2 relative p-6 lg:p-8">
+          <div class="fl-topbar"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-      <a class="unit glass reveal" href="products/operanova.html">
-        <div class="unit-top"><div class="unit-badge"><img src="assets/ic-target.png?v=1" alt="" aria-hidden="true" /></div><div class="unit-code">FTE-04</div></div>
-        <div><div class="unit-role">AI Cost Controller</div><h3>OperaNova Auto-FTE</h3></div>
-        <p class="unit-hook">The back-office employee who already read every report. Five live anomaly detectors screen every delivery and flag the costly ones — with the rupee exposure attached.</p>
-        <div class="unit-tags"><span class="tag tag-live">Strong MVP</span><span class="tag">F&amp;B ops</span></div>
-        <div class="unit-foot"><span class="unit-score">AI <b>3/5</b> · FTE <b>4/5</b></span><span class="unit-open">Open dossier <span class="arr">→</span></span></div>
-      </a>
+            <!-- LEFT -->
+            <div class="lg:pr-8 lg:border-r" style="border-color:rgba(255,255,255,.08)">
+              <div class="mb-4"><img src="assets/clerk/header_w.png?v=2" alt="" aria-hidden="true" style="height:104px;width:auto" /></div>
+              <h3 class="fl-h font-display font-bold m-0" style="font-size:2.05rem;line-height:1.04"><span class="text-gradient">Personal AI Employee</span></h3>
+              <p class="fl-sub m-0 mt-1" style="font-size:1.02rem">Meet AI Back-Office Clerk</p>
 
-      <a class="unit glass reveal" href="products/vision-alert.html">
-        <div class="unit-top"><div class="unit-badge"><img src="assets/ic-camera.png?v=1" alt="" aria-hidden="true" /></div><div class="unit-code">FTE-05</div></div>
-        <div><div class="unit-role">AI Security Guard</div><h3>Vision Alert</h3></div>
-        <p class="unit-hook">Turns the Dahua NVR you already own into a tireless 24/7 watcher — YOLO11 detection, object tracking and zone rules that fire a WhatsApp snapshot in seconds.</p>
-        <div class="unit-tags"><span class="tag tag-live">MVP · NVR-proven</span><span class="tag">Vision</span></div>
-        <div class="unit-foot"><span class="unit-score">AI <b>3/5</b> · FTE <b>4/5</b></span><span class="unit-open">Open dossier <span class="arr">→</span></span></div>
-      </a>
+              <div class="mt-6">
+                <div class="flex items-center gap-2.5">
+                  <span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:30px;height:30px"><i class="fa-solid fa-exclamation fl-green" style="font-size:.85rem"></i></span>
+                  <h4 class="fl-h font-display font-bold m-0" style="font-size:1.2rem">Why current ops fail</h4>
+                </div>
+                <p class="fl-body leading-relaxed mt-2 m-0" style="font-size:0.92rem">Back-office admin eats the week — inbox triage, chasing tasks, and hand-built reports that are stale by the time they ship.</p>
+              </div>
 
-      <div class="unit glass reveal" style="justify-content:center;text-align:center">
+              <div class="flex flex-col gap-4 mt-5">
+                <div class="flex items-start gap-3">
+                  <span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><img src="assets/clerk/mail_w.png?v=4" alt="" aria-hidden="true" style="width:26px;height:26px;object-fit:contain" /></span>
+                  <div><p class="fl-h font-semibold m-0" style="font-size:1rem">Inbox overload</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Gmail and WhatsApp pile up; the important thread is buried under noise.</p></div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><img src="assets/clerk/board_w.png?v=4" alt="" aria-hidden="true" style="width:26px;height:26px;object-fit:contain" /></span>
+                  <div><p class="fl-h font-semibold m-0" style="font-size:1rem">Work falls through</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Requests get lost between people instead of moving across one board.</p></div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><img src="assets/clerk/spreadsheet_w.png?v=4" alt="" aria-hidden="true" style="width:26px;height:26px;object-fit:contain" /></span>
+                  <div><p class="fl-h font-semibold m-0" style="font-size:1rem">Reports by hand</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Finance numbers are copy-pasted into spreadsheets, late and error-prone.</p></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="lg:pl-2">
+              <div class="mb-5">
+                <div class="flex items-center gap-2.5"><img src="assets/clerk/sparkle.png?v=3" alt="" aria-hidden="true" style="width:26px;height:26px" /><h4 class="fl-h font-display font-bold m-0" style="font-size:1.4rem">The autonomous FTE we deploy</h4></div>
+                <p class="fl-sub mt-1 m-0" style="font-size:0.95rem">A clerk that clears the inbox and builds the report</p>
+              </div>
+
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px">
+                <div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><img src="assets/clerk/listen_w.png?v=4" alt="" aria-hidden="true" style="width:36px;height:36px;object-fit:contain" /></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#22d3ee">Listen</span><span class="fl-pill font-bold rounded-full leading-none uppercase" style="font-size:0.6rem;padding:3px 8px">on</span></div>
+                  <p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Reads Gmail, WhatsApp and the ledger as work arrives.</p>
+                </div>
+                <div class="flex items-center gap-1.5 flex-none"><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><img src="assets/clerk/gmail.png?v=3" alt="" aria-hidden="true" style="width:20px;height:20px;object-fit:contain" /></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><img src="assets/clerk/whatsapp.png?v=3" alt="" aria-hidden="true" style="width:21px;height:21px;object-fit:contain" /></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><img src="assets/clerk/ledger.png?v=3" alt="" aria-hidden="true" style="width:20px;height:20px;object-fit:contain" /></div></div>
+              </div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px">
+                <div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><img src="assets/clerk/reasoning_w.png?v=4" alt="" aria-hidden="true" style="width:36px;height:36px;object-fit:contain" /></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#4F8DFF">Reasoning</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div>
+                  <p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Triages each item across a Kanban and plans the report you asked for.</p>
+                </div>
+                <img src="assets/clerk/kanban.png?v=3" alt="" aria-hidden="true" style="height:62px;width:auto" />
+              </div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px">
+                <div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><img src="assets/clerk/act_w.png?v=4" alt="" aria-hidden="true" style="width:36px;height:36px;object-fit:contain" /></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#a78bfa">Act</span></div>
+                  <p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Turns a plain-English ask into a charted, multi-sheet Excel report.</p>
+                </div>
+                <img src="assets/clerk/excel.png?v=3" alt="" aria-hidden="true" style="height:64px;width:auto" />
+              </div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px">
+                <div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><img src="assets/clerk/shield_w.png?v=4" alt="" aria-hidden="true" style="width:36px;height:36px;object-fit:contain" /></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#c084fc">Report</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div>
+                  <p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Every task and figure traceable to its source — no black boxes.</p>
+                </div>
+                <img src="assets/clerk/report.png?v=3" alt="" aria-hidden="true" style="height:70px;width:auto" />
+              </div>
+
+              <div class="flex items-center justify-between gap-3 mt-5">
+                <div class="fl-panel flex items-center gap-2" style="padding:8px 15px">
+                  <img src="assets/clerk/audit.png?v=3" alt="" aria-hidden="true" style="height:22px;width:auto" />
+                  <span class="fl-h font-semibold" style="font-size:0.92rem">100% audit</span>
+                </div>
+                <a href="products/personal-ai-employee.html" class="group inline-flex items-center gap-1.5 font-semibold fl-lime pr-1" style="text-decoration:none;font-size:0.9rem">Explore this FTE <i class="fa-solid fa-arrow-right text-xs transition-transform duration-500 ease-out group-hover:translate-x-1.5"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fte-featured fte-slide" style="grid-column:1/-1">
+        <div class="fl-card fte-v2 relative p-6 lg:p-8">
+          <div class="fl-topbar"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="lg:pr-8 lg:border-r" style="border-color:rgba(255,255,255,.08)">
+              <div class="mb-4 relative inline-flex items-end" style="height:92px;gap:2px"><i class="fa-solid fa-user-tie " style="font-size:4.3rem;line-height:1;color:#5ad6ff"></i><i class="fa-solid fa-inbox " style="font-size:2.3rem;line-height:1;color:#b7a6ff;margin-left:-8px;margin-bottom:6px"></i></div>
+              <h3 class="fl-h font-display font-bold m-0" style="font-size:2.05rem;line-height:1.04"><span class="text-gradient">Aria</span></h3>
+              <p class="fl-sub m-0 mt-1" style="font-size:1.02rem">Meet AI Chief of Staff</p>
+              <div class="mt-6">
+                <div class="flex items-center gap-2.5"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:30px;height:30px"><i class="fa-solid fa-exclamation fl-green" style="font-size:.85rem"></i></span><h4 class="fl-h font-display font-bold m-0" style="font-size:1.2rem">Why current ops fail</h4></div>
+                <p class="fl-body leading-relaxed mt-2 m-0" style="font-size:0.92rem">A founder's attention leaks across two inboxes and a phone — replies slip, and delegated tasks quietly die.</p>
+              </div>
+              <div class="flex flex-col gap-4 mt-5"><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-envelopes-bulk " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Two inboxes, one you</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Messages span email and WhatsApp; nothing sees them together.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-pen-clip " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Slow to reply</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Drafting in your own voice, all day, is the bottleneck.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-hourglass-half " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Delegation rot</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Tasks handed off never get chased or closed.</p></div></div></div>
+            </div>
+            <div class="lg:pl-2">
+              <div class="mb-5"><div class="flex items-center gap-2.5"><i class="fa-solid fa-star" style="color:#8fd41a;font-size:1.35rem"></i><h4 class="fl-h font-display font-bold m-0" style="font-size:1.4rem">The autonomous FTE we deploy</h4></div><p class="fl-sub mt-1 m-0" style="font-size:0.95rem">Owns your comms and your delegation loop</p></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-regular fa-eye " style="color:#22d3ee;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#22d3ee">Watch</span><span class="fl-pill font-bold rounded-full leading-none uppercase" style="font-size:0.6rem;padding:3px 8px">on</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Monitors <span class="text-white font-medium">two inboxes and WhatsApp</span> and classifies every message.</p></div><div class="flex items-center gap-1.5 flex-none"><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-envelope " style="color:#ff8a8a;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-regular fa-envelope " style="color:#7fb0ff;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-brands fa-whatsapp " style="color:#25D366;font-size:1.05rem"></i></div></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-microchip " style="color:#4F8DFF;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#4F8DFF">Reasoning</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Decides what needs you vs. what it can handle <span class="text-white font-medium">in your voice</span>.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-inbox " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-bolt " style="color:#a78bfa;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#a78bfa">Act</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Drafts replies and <span class="text-white font-medium">opens, chases and auto-closes</span> delegated tasks.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-reply " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-chart-line " style="color:#c084fc;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#c084fc">Report</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">A running log of <span class="text-white font-medium">what it sent and what&#39;s still open</span>.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-clipboard-check " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="flex items-center justify-between gap-3 mt-5">
+                <div class="fl-panel flex items-center gap-2" style="padding:8px 15px"><i class="fa-solid fa-shield-halved" style="color:#37d4a7;font-size:1.05rem"></i><span class="fl-h font-semibold" style="font-size:0.92rem">100% audit</span></div>
+                <a href="products/aria-assistant.html" class="group inline-flex items-center gap-1.5 font-semibold fl-lime pr-1" style="text-decoration:none;font-size:0.9rem">Explore this FTE <i class="fa-solid fa-arrow-right text-xs transition-transform duration-500 ease-out group-hover:translate-x-1.5"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fte-featured fte-slide" style="grid-column:1/-1">
+        <div class="fl-card fte-v2 relative p-6 lg:p-8">
+          <div class="fl-topbar"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="lg:pr-8 lg:border-r" style="border-color:rgba(255,255,255,.08)">
+              <div class="mb-4 relative inline-flex items-end" style="height:92px;gap:2px"><i class="fa-solid fa-magnifying-glass-dollar " style="font-size:4.3rem;line-height:1;color:#5ad6ff"></i><i class="fa-solid fa-chart-line " style="font-size:2.3rem;line-height:1;color:#b7a6ff;margin-left:-8px;margin-bottom:6px"></i></div>
+              <h3 class="fl-h font-display font-bold m-0" style="font-size:2.05rem;line-height:1.04"><span class="text-gradient">OperaNova</span></h3>
+              <p class="fl-sub m-0 mt-1" style="font-size:1.02rem">Meet AI Cost Controller</p>
+              <div class="mt-6">
+                <div class="flex items-center gap-2.5"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:30px;height:30px"><i class="fa-solid fa-exclamation fl-green" style="font-size:.85rem"></i></span><h4 class="fl-h font-display font-bold m-0" style="font-size:1.2rem">Why current ops fail</h4></div>
+                <p class="fl-body leading-relaxed mt-2 m-0" style="font-size:0.92rem">Margin leaks in the receiving bay — wrong units, price spikes and usage variance hide inside reports no one reads in time.</p>
+              </div>
+              <div class="flex flex-col gap-4 mt-5"><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-money-bill-trend-up " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Silent overspend</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">A price spike on one delivery slips through unnoticed.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-scale-unbalanced " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Usage variance</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Theoretical vs. actual usage drifts with no one watching.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-file-circle-xmark " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Reports read too late</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">The costly item is found after the money&#39;s gone.</p></div></div></div>
+            </div>
+            <div class="lg:pl-2">
+              <div class="mb-5"><div class="flex items-center gap-2.5"><i class="fa-solid fa-star" style="color:#8fd41a;font-size:1.35rem"></i><h4 class="fl-h font-display font-bold m-0" style="font-size:1.4rem">The autonomous FTE we deploy</h4></div><p class="fl-sub mt-1 m-0" style="font-size:0.95rem">Screens every delivery before it's approved</p></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-regular fa-eye " style="color:#22d3ee;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#22d3ee">Watch</span><span class="fl-pill font-bold rounded-full leading-none uppercase" style="font-size:0.6rem;padding:3px 8px">on</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Sits on the <span class="text-white font-medium">stock-in flow</span> and reads every receipt and report.</p></div><div class="flex items-center gap-1.5 flex-none"><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-file-invoice-dollar " style="color:#4fd8b0;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-gauge-high " style="color:#7fb0ff;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-brands fa-whatsapp " style="color:#25D366;font-size:1.05rem"></i></div></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-microchip " style="color:#4F8DFF;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#4F8DFF">Reasoning</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Runs <span class="text-white font-medium">5 anomaly detectors</span> — wrong-unit, price-spike, variance, sales, margin.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-magnifying-glass-chart " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-bolt " style="color:#a78bfa;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#a78bfa">Act</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Flags the costly ones with the <span class="text-white font-medium">exposure attached</span> and alerts out-of-band.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-triangle-exclamation " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-chart-line " style="color:#c084fc;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#c084fc">Report</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Findings deduped, severity-ranked and <span class="text-white font-medium">logged to an audit feed</span>.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-chart-line " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="flex items-center justify-between gap-3 mt-5">
+                <div class="fl-panel flex items-center gap-2" style="padding:8px 15px"><i class="fa-solid fa-shield-halved" style="color:#37d4a7;font-size:1.05rem"></i><span class="fl-h font-semibold" style="font-size:0.92rem">100% audit</span></div>
+                <a href="products/operanova.html" class="group inline-flex items-center gap-1.5 font-semibold fl-lime pr-1" style="text-decoration:none;font-size:0.9rem">Explore this FTE <i class="fa-solid fa-arrow-right text-xs transition-transform duration-500 ease-out group-hover:translate-x-1.5"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fte-featured fte-slide" style="grid-column:1/-1">
+        <div class="fl-card fte-v2 relative p-6 lg:p-8">
+          <div class="fl-topbar"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="lg:pr-8 lg:border-r" style="border-color:rgba(255,255,255,.08)">
+              <div class="mb-4 relative inline-flex items-end" style="height:92px;gap:2px"><i class="fa-solid fa-shield-halved " style="font-size:4.3rem;line-height:1;color:#5ad6ff"></i><i class="fa-solid fa-video " style="font-size:2.3rem;line-height:1;color:#b7a6ff;margin-left:-8px;margin-bottom:6px"></i></div>
+              <h3 class="fl-h font-display font-bold m-0" style="font-size:2.05rem;line-height:1.04"><span class="text-gradient">Vision Alert</span></h3>
+              <p class="fl-sub m-0 mt-1" style="font-size:1.02rem">Meet AI Security Guard</p>
+              <div class="mt-6">
+                <div class="flex items-center gap-2.5"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:30px;height:30px"><i class="fa-solid fa-exclamation fl-green" style="font-size:.85rem"></i></span><h4 class="fl-h font-display font-bold m-0" style="font-size:1.2rem">Why current ops fail</h4></div>
+                <p class="fl-body leading-relaxed mt-2 m-0" style="font-size:0.92rem">Cameras record everything and watch nothing — by the time footage is reviewed, the incident is hours old.</p>
+              </div>
+              <div class="flex flex-col gap-4 mt-5"><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-eye-slash " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">No one&#39;s watching</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Feeds run 24/7 but a human only looks after something goes wrong.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-clock " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Found too late</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Review happens after the fact, never in the moment.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-video " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Hardware you already own</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">The NVR is capable but does nothing beyond recording.</p></div></div></div>
+            </div>
+            <div class="lg:pl-2">
+              <div class="mb-5"><div class="flex items-center gap-2.5"><i class="fa-solid fa-star" style="color:#8fd41a;font-size:1.35rem"></i><h4 class="fl-h font-display font-bold m-0" style="font-size:1.4rem">The autonomous FTE we deploy</h4></div><p class="fl-sub mt-1 m-0" style="font-size:0.95rem">Turns your existing NVR into a tireless watcher</p></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-regular fa-eye " style="color:#22d3ee;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#22d3ee">Watch</span><span class="fl-pill font-bold rounded-full leading-none uppercase" style="font-size:0.6rem;padding:3px 8px">on</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Pulls the <span class="text-white font-medium">NVR streams you already own</span> and runs detection frame by frame.</p></div><div class="flex items-center gap-1.5 flex-none"><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-video " style="color:#5ad6ff;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-brands fa-whatsapp " style="color:#25D366;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-gauge-high " style="color:#7fb0ff;font-size:1.05rem"></i></div></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-microchip " style="color:#4F8DFF;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#4F8DFF">Reasoning</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Tracks objects and applies <span class="text-white font-medium">zone rules</span> to decide what matters.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-object-group " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-bolt " style="color:#a78bfa;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#a78bfa">Act</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Fires a <span class="text-white font-medium">WhatsApp snapshot in seconds</span> when a rule trips.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-bell " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-chart-line " style="color:#c084fc;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#c084fc">Report</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Every alert stamped and stored for <span class="text-white font-medium">after-the-fact review</span>.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-clock-rotate-left " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="flex items-center justify-between gap-3 mt-5">
+                <div class="fl-panel flex items-center gap-2" style="padding:8px 15px"><i class="fa-solid fa-shield-halved" style="color:#37d4a7;font-size:1.05rem"></i><span class="fl-h font-semibold" style="font-size:0.92rem">100% audit</span></div>
+                <a href="products/vision-alert.html" class="group inline-flex items-center gap-1.5 font-semibold fl-lime pr-1" style="text-decoration:none;font-size:0.9rem">Explore this FTE <i class="fa-solid fa-arrow-right text-xs transition-transform duration-500 ease-out group-hover:translate-x-1.5"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fte-featured fte-slide" style="grid-column:1/-1">
+        <div class="fl-card fte-v2 relative p-6 lg:p-8">
+          <div class="fl-topbar"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="lg:pr-8 lg:border-r" style="border-color:rgba(255,255,255,.08)">
+              <div class="mb-4 relative inline-flex items-end" style="height:92px;gap:2px"><i class="fa-solid fa-microphone-lines " style="font-size:4.3rem;line-height:1;color:#5ad6ff"></i><i class="fa-solid fa-file-lines " style="font-size:2.3rem;line-height:1;color:#b7a6ff;margin-left:-8px;margin-bottom:6px"></i></div>
+              <h3 class="fl-h font-display font-bold m-0" style="font-size:2.05rem;line-height:1.04"><span class="text-gradient">Vocalytic</span></h3>
+              <p class="fl-sub m-0 mt-1" style="font-size:1.02rem">Meet AI Conversation & Quality Analyst</p>
+              <div class="mt-6">
+                <div class="flex items-center gap-2.5"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:30px;height:30px"><i class="fa-solid fa-exclamation fl-green" style="font-size:.85rem"></i></span><h4 class="fl-h font-display font-bold m-0" style="font-size:1.2rem">Why current ops fail</h4></div>
+                <p class="fl-body leading-relaxed mt-2 m-0" style="font-size:0.92rem">Calls and meetings hold the decisions — and vanish the moment they end, especially in mixed Urdu + English.</p>
+              </div>
+              <div class="flex flex-col gap-4 mt-5"><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-language " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Mixed-language mess</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Urdu + English in one call defeats off-the-shelf transcription.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-user-group " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Who said what</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">No record of speakers, actions or agreements.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-file-circle-xmark " style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Lost to memory</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Minutes and specs never get written up.</p></div></div></div>
+            </div>
+            <div class="lg:pl-2">
+              <div class="mb-5"><div class="flex items-center gap-2.5"><i class="fa-solid fa-star" style="color:#8fd41a;font-size:1.35rem"></i><h4 class="fl-h font-display font-bold m-0" style="font-size:1.4rem">The autonomous FTE we deploy</h4></div><p class="fl-sub mt-1 m-0" style="font-size:0.95rem">Turns every call into a record you can act on</p></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-regular fa-eye " style="color:#22d3ee;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#22d3ee">Watch</span><span class="fl-pill font-bold rounded-full leading-none uppercase" style="font-size:0.6rem;padding:3px 8px">on</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Listens to <span class="text-white font-medium">calls, meetings and brainstorms</span> in mixed Urdu + English.</p></div><div class="flex items-center gap-1.5 flex-none"><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-phone " style="color:#6fe08a;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-microphone " style="color:#b79bff;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-file-lines " style="color:#7fb0ff;font-size:1.05rem"></i></div></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-microchip " style="color:#4F8DFF;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#4F8DFF">Reasoning</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Diarizes <span class="text-white font-medium">who said what</span> and separates decisions from chatter.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-users " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-bolt " style="color:#a78bfa;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#a78bfa">Act</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Produces a <span class="text-white font-medium">transcript, translation, minutes and a build-ready spec</span> — on-device.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-file-lines " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-chart-line " style="color:#c084fc;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#c084fc">Report</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Every output <span class="text-white font-medium">tied back to the audio</span> it came from.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-language " style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="flex items-center justify-between gap-3 mt-5">
+                <div class="fl-panel flex items-center gap-2" style="padding:8px 15px"><i class="fa-solid fa-shield-halved" style="color:#37d4a7;font-size:1.05rem"></i><span class="fl-h font-semibold" style="font-size:0.92rem">100% audit</span></div>
+                <a href="products/vocalytic.html" class="group inline-flex items-center gap-1.5 font-semibold fl-lime pr-1" style="text-decoration:none;font-size:0.9rem">Explore this FTE <i class="fa-solid fa-arrow-right text-xs transition-transform duration-500 ease-out group-hover:translate-x-1.5"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fte-featured fte-slide" style="grid-column:1/-1">
+        <div class="fl-card fte-v2 relative p-6 lg:p-8">
+          <div class="fl-topbar"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="lg:pr-8 lg:border-r" style="border-color:rgba(255,255,255,.08)">
+              <div class="mb-4 relative inline-flex items-end" style="height:92px;gap:2px"><i class="fa-solid fa-bell-concierge" style="font-size:4.3rem;line-height:1;color:#5ad6ff"></i><i class="fa-solid fa-credit-card" style="font-size:2.3rem;line-height:1;color:#b7a6ff;margin-left:-8px;margin-bottom:6px"></i></div>
+              <h3 class="fl-h font-display font-bold m-0" style="font-size:2.05rem;line-height:1.04"><span class="text-gradient">PerkPilot</span></h3>
+              <p class="fl-sub m-0 mt-1" style="font-size:1.02rem">Meet AI Card-Deals Concierge</p>
+              <div class="mt-6"><div class="flex items-center gap-2.5"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:30px;height:30px"><i class="fa-solid fa-exclamation fl-green" style="font-size:.85rem"></i></span><h4 class="fl-h font-display font-bold m-0" style="font-size:1.2rem">Why current ops fail</h4></div>
+                <p class="fl-body leading-relaxed mt-2 m-0" style="font-size:0.92rem">Card-linked food deals change weekly across a dozen banks — diners miss what they qualify for, staff apply the wrong one, and keeping it all live is a manual PDF-and-Excel chore.</p></div>
+              <div class="flex flex-col gap-4 mt-5"><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-face-frown-open" style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Missed savings</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Diners rarely know which card in their wallet unlocks today&#39;s best deal — so they overpay.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-file-excel" style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Manual campaign churn</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Every campaign, someone hand-wrangles bank-alliance PDFs and Excel into the system.</p></div></div><div class="flex items-start gap-3"><span class="fl-circle rounded-full flex items-center justify-center flex-none" style="width:48px;height:48px"><i class="fa-solid fa-triangle-exclamation" style="color:#e6ecf5;font-size:1.15rem"></i></span><div><p class="fl-h font-semibold m-0" style="font-size:1rem">Wrong discount at the till</p><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">A stale or mismatched card BIN applies the wrong discount — real money lost at the counter.</p></div></div></div>
+            </div>
+            <div class="lg:pl-2">
+              <div class="mb-5"><div class="flex items-center gap-2.5"><i class="fa-solid fa-star" style="color:#8fd41a;font-size:1.35rem"></i><h4 class="fl-h font-display font-bold m-0" style="font-size:1.4rem">The autonomous FTE we deploy</h4></div><p class="fl-sub mt-1 m-0" style="font-size:0.95rem">The best card deal, cracked in a tap — kept live 24/7</p></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-regular fa-eye" style="color:#22d3ee;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#22d3ee">Watch</span><span class="fl-pill font-bold rounded-full leading-none uppercase" style="font-size:0.6rem;padding:3px 8px">on</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Reads every bank-alliance PDF and the diner&#39;s <span class="text-white font-medium">card BIN</span> the moment it&#39;s scanned.</p></div><div class="flex items-center gap-1.5 flex-none"><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-credit-card" style="color:#5ad6ff;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-solid fa-file-pdf" style="color:#ff8a8a;font-size:1.05rem"></i></div><div class="fl-tile flex items-center justify-center" style="width:36px;height:36px"><i class="fa-brands fa-whatsapp" style="color:#25D366;font-size:1.05rem"></i></div></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-microchip" style="color:#4F8DFF;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#4F8DFF">Reasoning</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Validates the BIN against a real <span class="text-white font-medium">IIN reference</span> and matches today&#39;s live, eligible deals.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-id-card" style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-bolt" style="color:#a78bfa;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#a78bfa">Act</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Surfaces the <span class="text-white font-medium">single best discount</span> instantly — and publishes new campaigns after one approval.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-tags" style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="fl-conn"></div>
+              <div class="fl-panel flex items-center gap-4" style="padding:12px 16px"><div class="fl-badge rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px"><i class="fa-solid fa-chart-line" style="color:#c084fc;font-size:1.5rem"></i></div><div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="font-semibold" style="font-size:1.15rem;color:#c084fc">Report</span><span class="fl-pill font-bold rounded-full leading-none " style="font-size:0.6rem;padding:3px 8px">…</span></div><p class="fl-body leading-snug m-0 mt-0.5" style="font-size:0.88rem">Every deal validated, every lookup logged — <span class="text-white font-medium">never a wrong discount</span> at the counter.</p></div><div class="flex-none" style="width:70px;text-align:center"><i class="fa-solid fa-receipt" style="color:#8fa3c4;font-size:2.1rem"></i></div></div>
+              <div class="flex items-center justify-between gap-3 mt-5"><div class="fl-panel flex items-center gap-2" style="padding:8px 15px"><i class="fa-solid fa-shield-halved" style="color:#37d4a7;font-size:1.05rem"></i><span class="fl-h font-semibold" style="font-size:0.92rem">100% audit</span></div><a href="products/perkpilot.html" class="group inline-flex items-center gap-1.5 font-semibold fl-lime pr-1" style="text-decoration:none;font-size:0.9rem">Explore this FTE <i class="fa-solid fa-arrow-right text-xs transition-transform duration-500 ease-out group-hover:translate-x-1.5"></i></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="unit glass reveal" style="grid-column:1/-1;justify-content:center;text-align:center">
         <div class="unit-badge" style="margin:0 auto"><img src="assets/ic-lab.png?v=1" alt="" aria-hidden="true" /></div>
-        <h3 style="margin-top:.4rem">+ 20 more in the lab</h3>
+        <h3 style="margin-top:.4rem">+ 8 more in the lab</h3>
         <p class="unit-hook" style="text-align:center">Security, fintech, edtech, voice, content, trading — field-ready, incubating, and the platform capabilities that power them all.</p>
         <a href="lab.html" class="btn btn-ghost" style="align-self:center">Explore the lab <span class="arr">→</span></a>
       </div>
@@ -397,33 +918,43 @@
       <div class="proc-steps">
         <div class="proc-step left">
           <span class="proc-dot" aria-hidden="true"></span>
-          <span class="proc-num">01</span>
-          <h3>Find the bleeding role</h3>
-          <p>We map the job draining your hours — the inbox, the complaints queue, the food cost, the camera no one watches — and the channels it already runs on.</p>
+          <div class="proc-text">
+            <span class="proc-num">01</span>
+            <h3>Find the bleeding role</h3>
+            <p>We map the job draining your hours — the inbox, the complaints queue, the food cost, the camera no one watches — and the channels it already runs on.</p>
+          </div>
         </div>
         <div class="proc-step right">
           <span class="proc-dot" aria-hidden="true"></span>
-          <span class="proc-num">02</span>
-          <h3>Scope the FTE</h3>
-          <p>We define exactly what the <span class="fte"><i>F</i>ull <i>T</i>ime <i>E</i>quivalent</span> owns end to end, the policy it follows, and the points where a human stays in command.</p>
+          <div class="proc-text">
+            <span class="proc-num">02</span>
+            <h3>Scope the FTE</h3>
+            <p>We define exactly what the <span class="fte"><i>F</i>ull <i>T</i>ime <i>E</i>quivalent</span> owns end to end, the policy it follows, and the points where a human stays in command.</p>
+          </div>
         </div>
         <div class="proc-step left">
           <span class="proc-dot" aria-hidden="true"></span>
-          <span class="proc-num">03</span>
-          <h3>Wire it in</h3>
-          <p>We connect it to your existing stack — Gmail, WhatsApp, cameras, ledgers, dashboards — and ground it in your real data and playbooks. No rebuild.</p>
+          <div class="proc-text">
+            <span class="proc-num">03</span>
+            <h3>Wire it in</h3>
+            <p>We connect it to your existing stack — Gmail, WhatsApp, cameras, ledgers, dashboards — and ground it in your real data and playbooks. No rebuild.</p>
+          </div>
         </div>
         <div class="proc-step right">
           <span class="proc-dot" aria-hidden="true"></span>
-          <span class="proc-num">04</span>
-          <h3>Deploy to production</h3>
-          <p>The FTE goes live: watching, reasoning, acting and reporting 24/7 — with approval gates wherever the stakes are high.</p>
+          <div class="proc-text">
+            <span class="proc-num">04</span>
+            <h3>Deploy to production</h3>
+            <p>The FTE goes live: watching, reasoning, acting and reporting 24/7 — with approval gates wherever the stakes are high.</p>
+          </div>
         </div>
         <div class="proc-step left">
           <span class="proc-dot" aria-hidden="true"></span>
-          <span class="proc-num">05</span>
-          <h3>Measure &amp; scale</h3>
-          <p>Every action is logged and explainable. Once it's proven on one role, we point the same platform at the next.</p>
+          <div class="proc-text">
+            <span class="proc-num">05</span>
+            <h3>Measure &amp; scale</h3>
+            <p>Every action is logged and explainable. Once it's proven on one role, we point the same platform at the next.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -499,8 +1030,8 @@
     </div>
     <div class="stats-grid">
       <div class="stat reveal"><div class="n ai-grad-text"><span data-to="168">0</span></div><div class="l">hours each FTE works / week</div><small>vs a human's ~40 · target</small></div>
-      <div class="stat reveal"><div class="n ai-grad-text"><span data-to="5">0</span></div><div class="l">flagship FTEs shipping</div><small>1 live in production</small></div>
-      <div class="stat reveal"><div class="n ai-grad-text"><span data-to="25">0</span></div><div class="l">products assessed from source</div><small>scored AI-native + FTE-fit</small></div>
+      <div class="stat reveal"><div class="n ai-grad-text"><span data-to="7">0</span></div><div class="l">flagship FTEs shipping</div><small>1 live in production</small></div>
+      <div class="stat reveal"><div class="n ai-grad-text"><span data-to="26">0</span></div><div class="l">products assessed from source</div><small>scored AI-native + FTE-fit</small></div>
       <div class="stat reveal"><div class="n ai-grad-text">$<span data-to="0">0</span></div><div class="l">infra on the live one</div><small>Always-Free cloud</small></div>
     </div>
   </div>
@@ -510,15 +1041,78 @@
 <section class="final" id="final">
   <div class="wrap">
     <div class="final-card glass reveal">
-      <img class="brand-watermark" src="assets/veloce-symbol.png?v=38" alt="" aria-hidden="true" />
+      <img class="brand-watermark" src="assets/veloce-icon-2026.png?v=2026" alt="" aria-hidden="true" />
       <img class="brand-ill" src="assets/ill-savings.png?v=1" alt="" aria-hidden="true" style="max-width:188px;margin:0 auto .6rem" />
       <span class="eyebrow" style="justify-content:center;display:inline-flex">Start a shift</span>
       <h2>Put one to work <span class="ai-grad-text">this quarter.</span></h2>
       <p>Pick a role that's bleeding hours — inbox, complaints, food cost, the camera no one watches — and we'll deploy the <span class="fte"><i>F</i>ull <i>T</i>ime <i>E</i>quivalent Employee</span> that owns it.</p>
-      <div style="display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap">
-        <a href="mailto:hello@veloce-ai.com" class="btn btn-primary">Book a deployment <span class="arr">→</span></a>
-        <a href="#fleet" class="btn btn-ghost">Review the fleet</a>
+
+      <div class="lead-grid">
+        <!-- FORM -->
+        <form id="leadForm" class="lead-form glass reveal" autocomplete="on">
+          <input type="hidden" name="access_key" value="598c7af3-a4a9-45eb-a8c8-7d95d19d1917" />
+          <input type="hidden" name="subject" value="New Veloce AI deployment enquiry" />
+          <input type="hidden" name="from_name" value="Veloce AI website" />
+          <!-- honeypot: bots fill this, humans don't -->
+          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
+
+          <div class="lf-row">
+            <div class="lf-field">
+              <label for="name">Your name</label>
+              <input id="name" name="name" type="text" required placeholder="Jane Doe" />
+            </div>
+            <div class="lf-field">
+              <label for="email">Work email</label>
+              <input id="email" name="email" type="email" required placeholder="jane@company.com" />
+            </div>
+          </div>
+
+          <div class="lf-row">
+            <div class="lf-field">
+              <label for="company">Company</label>
+              <input id="company" name="company" type="text" required placeholder="Company name" />
+            </div>
+            <div class="lf-field">
+              <label for="role_title">Your role</label>
+              <input id="role_title" name="role_title" type="text" placeholder="Ops / CX / Founder…" />
+            </div>
+          </div>
+
+          <div class="lf-field">
+            <label for="interest">Which role do you want to automate?</label>
+            <select id="interest" name="interest">
+              <option value="Complaints / CX">Complaints / customer experience</option>
+              <option value="Back-office / Finance">Back-office / finance ops</option>
+              <option value="Inbox / Assistant">Inbox &amp; delegation (chief of staff)</option>
+              <option value="Security / Vision">Security / camera monitoring</option>
+              <option value="Other / Not sure">Something else / not sure yet</option>
+            </select>
+          </div>
+
+          <div class="lf-field">
+            <label for="message">What's the job, and how much volume?</label>
+            <textarea id="message" name="message" placeholder="e.g. ~400 complaints/week across web + WhatsApp, 2 staff handling them…"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="leadSubmit">Send the brief <span class="arr">→</span></button>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          <p class="lf-note">We never share your details. Prefer to talk? Book a live demo →</p>
+        </form>
+
+        <!-- DEMO BOOKING -->
+        <aside class="demo-card glass reveal">
+          <span class="eyebrow">Faster path</span>
+          <h3>Book a 20-min demo</h3>
+          <p style="color:var(--fog,#c4cad6);font-size:.95rem;margin:.2rem 0 0">Watch an autonomous FTE actually run — Watch → Reason → Act → Report — on a live sandbox. No slides.</p>
+          <a href="https://calendly.com/sanjum77/30min" target="_blank" rel="noopener" class="btn btn-primary" id="bookDemo" style="justify-content:center">Pick a time <span class="arr">→</span></a>
+          <ul>
+            <li><span class="ck">✦</span><span>See the agent work end-to-end on a demo brand.</span></li>
+            <li><span class="ck">✦</span><span>We split what runs <b>today</b> from the <b>roadmap</b> — no vaporware.</span></li>
+            <li><span class="ck">✦</span><span>Leave with a deployment plan for one role.</span></li>
+          </ul>
+        </aside>
       </div>
+
       <p style="margin-top:1.4rem;font-size:.82rem;color:var(--muted);font-family:var(--font-mono)">Agent-first · human-in-command · full audit trail · your cloud or ours</p>
     </div>
   </div>
@@ -529,19 +1123,19 @@
     <div class="foot-top">
       <div class="foot-brand">
         <div class="foot-lockup">
-          <img class="foot-symbol" src="assets/veloce-symbol.png?v=38" alt="Veloce-AI" />
-          <img class="foot-wordmark" src="assets/veloce-yellow.png?v=1" alt="Veloce" />
-          <img class="foot-tagline" src="assets/veloce-tagline.png?v=38" alt="Autonomous Intelligence. Always On." />
+          <img class="foot-wordmark" src="assets/veloce-logo-2026.png?v=2026" alt="Veloce-AI — Autonomous Intelligence. Always On." />
         </div>
         <p>The Restless Workforce. <em>Autonomous Intelligence. Always On.</em> Autonomous <span class="fte"><i>F</i>ull <i>T</i>ime <i>E</i>quivalent Employees</span> that work 24/7 so your people don't have to.</p>
       </div>
       <div class="foot-col">
         <h5>The Fleet</h5>
-        <a href="products/complainthub.html">AI Complaints Officer</a>
+        <a href="products/complainthub.html">AI Complaints &amp; Facilities Officer</a>
         <a href="products/personal-ai-employee.html">AI Back-Office Clerk</a>
         <a href="products/aria-assistant.html">AI Chief of Staff</a>
         <a href="products/operanova.html">AI Cost Controller</a>
         <a href="products/vision-alert.html">AI Security Guard</a>
+        <a href="products/vocalytic.html">AI Conversation &amp; Quality Analyst</a>
+        <a href="products/perkpilot.html">AI Card-Deals Concierge</a>
       </div>
       <div class="foot-col">
         <h5>Company</h5>
@@ -558,7 +1152,25 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=41"></script>
+<script src="assets/app.js?v=42"></script>
+<!-- Fleet swap-in observer: animate each FTE in/out of focus as it scrolls through. -->
+<script>
+(function(){
+  var mq = window.matchMedia('(min-width:861px) and (prefers-reduced-motion:no-preference)');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.fte-slide'));
+  if(!slides.length) return;
+  if(!('IntersectionObserver' in window) || !mq.matches){
+    slides.forEach(function(s){ s.classList.add('fte-in'); }); return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.intersectionRatio >= 0.45) e.target.classList.add('fte-in');
+      else if(e.intersectionRatio <= 0.15) e.target.classList.remove('fte-in');
+    });
+  }, { threshold:[0,0.15,0.45,0.75,1] });
+  slides.forEach(function(s){ io.observe(s); });
+})();
+</script>
 <!-- Hero text reveal: split h1 + sub into masked words, preserving inline markup. -->
 <script>
 (function(){
@@ -606,74 +1218,6 @@
 </script>
 
 <!-- Testimonials slider · fanned stack, vanilla (no deps) -->
-<script>
-(function () {
-  // NOTE: placeholder quotes/avatars from the design demo — replace with real,
-  // attributable customer quotes before this goes live (honesty rule).
-  const TESTIMONIALS = [
-    { text: "Veloce's complaints FTE took over our inbox triage on day one. It just runs.", by: "Maya Chen, Head of CX", img: "https://i.pravatar.cc/120?img=5" },
-    { text: "We rolled it across the team and accountability went up overnight. A genuine change.", by: "Daniel Okafor, Ops Manager", img: "https://i.pravatar.cc/120?img=12" },
-    { text: "The audit trail and human-in-command controls are what got it past our risk team.", by: "Sofia Marchetti, Founder", img: "https://i.pravatar.cc/120?img=32" },
-    { text: "Reporting that used to take an afternoon now lands as a charted Excel in minutes.", by: "Aiden Brooks, Finance Lead", img: "https://i.pravatar.cc/120?img=15" },
-    { text: "It watches the channels we already use — no rebuild, no new dashboards to babysit.", by: "Priya Nair, IT Director", img: "https://i.pravatar.cc/120?img=45" },
-    { text: "Built agent-first, not bolted on. You can feel the difference in how it reasons.", by: "Lucas Müller, CTO", img: "https://i.pravatar.cc/120?img=8" },
-    { text: "24/7 cover without the headcount. The night-shift alerts alone paid for it.", by: "Hana Sato, Security Lead", img: "https://i.pravatar.cc/120?img=20" },
-    { text: "Support is fast, the controls are clear, and it actually owns the job end to end.", by: "Marcus Reed, COO", img: "https://i.pravatar.cc/120?img=51" }
-  ];
-
-  const stage = document.querySelector(".testimonials");
-  if (!stage) return;
-
-  const sizeFor = () => Math.max(240, Math.min(360, window.innerWidth * 0.78));
-  let cardSize = sizeFor();
-  let active = 0;
-
-  const cards = TESTIMONIALS.map((t, i) => {
-    const el = document.createElement("div");
-    el.className = "t-card";
-    el.innerHTML =
-      '<span class="corner"></span>' +
-      '<img src="' + t.img + '" alt="" loading="lazy" />' +
-      '<h3 class="t-text">"' + t.text + '"</h3>' +
-      '<p class="t-by">— ' + t.by + '</p>';
-    el.addEventListener("click", () => { active = i; render(); });
-    stage.appendChild(el);
-    return el;
-  });
-
-  const n = cards.length;
-
-  function render() {
-    cards.forEach((el, i) => {
-      let pos = i - active;                         // circular shortest offset
-      if (pos > n / 2) pos -= n;
-      if (pos < -n / 2) pos += n;
-      const center = pos === 0;
-      // spread scales with viewport so the fan fills the full width (no side gaps)
-      const step = Math.min(cardSize * 0.95, window.innerWidth / 6.2);
-      const tx = step * pos;
-      const ty = center ? -55 : (Math.abs(pos) % 2 ? 15 : -15);
-      const rot = center ? 0 : (Math.abs(pos) % 2 ? 2.5 : -2.5);
-      el.style.width = cardSize + "px";
-      el.style.height = cardSize + "px";
-      el.style.transform =
-        "translate(-50%, -50%) translateX(" + tx + "px) translateY(" + ty + "px) rotate(" + rot + "deg)";
-      el.style.zIndex = n - Math.abs(pos);
-      el.style.opacity = Math.abs(pos) > 3 ? 0 : 1;
-      el.style.pointerEvents = Math.abs(pos) > 3 ? "none" : "auto";
-      el.classList.toggle("center", center);
-    });
-  }
-
-  const move = (dir) => { active = (active + dir + n) % n; render(); };
-  stage.querySelector(".t-prev").addEventListener("click", () => move(-1));
-  stage.querySelector(".t-next").addEventListener("click", () => move(1));
-  window.addEventListener("resize", () => { cardSize = sizeFor(); render(); });
-
-  render();
-})();
-</script>
-
 <!-- Our Process — build the serpentine path through the step dots, then draw it
      with scroll progress (rAF-eased) and light each node as the line reaches it. -->
 <script>
@@ -695,9 +1239,12 @@
       var r = s.querySelector('.proc-dot').getBoundingClientRect();
       return { x: r.left - tr.left + r.width/2, y: r.top - tr.top + r.height/2 };
     });
+    // smooth serpentine (growthloops "our process"): each segment is a cubic with
+    // control points at the endpoints' x and the mid-y, giving vertical tangents at
+    // every node — the line leaves each node straight, then bends across to the next.
     var d = 'M ' + pts[0].x + ' ' + pts[0].y;
     for(var i=0;i<pts.length-1;i++){
-      var a = pts[i], b = pts[i+1], my = (a.y + b.y)/2;   // vertical S-curve between alternating x
+      var a = pts[i], b = pts[i+1], my = (a.y + b.y) / 2;
       d += ' C ' + a.x + ' ' + my + ', ' + b.x + ' ' + my + ', ' + b.x + ' ' + b.y;
     }
     bg.setAttribute('d', d); line.setAttribute('d', d);
@@ -728,6 +1275,106 @@
   setTimeout(init, 350);                                   // re-measure after fonts settle
   window.addEventListener('resize', function(){ build(); onScroll(); }, { passive:true });
   window.addEventListener('scroll', onScroll, { passive:true });
+})();
+</script>
+
+<script>
+/* ---- Stage A: lead form submit (Web3Forms, no backend) ---- */
+(function () {
+  var form = document.getElementById('leadForm');
+  if (!form) return;
+  var statusEl = document.getElementById('formStatus');
+  var btn = document.getElementById('leadSubmit');
+  var KEY_PLACEHOLDER = 'YOUR_WEB3FORMS_ACCESS_KEY';
+
+  function setStatus(msg, type) { statusEl.className = 'form-status ' + type; statusEl.textContent = msg; }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var key = form.querySelector('[name="access_key"]').value;
+    if (key === KEY_PLACEHOLDER) {
+      setStatus('Form not configured yet — add your Web3Forms access key in index.html.', 'err');
+      return;
+    }
+    btn.disabled = true; var label = btn.innerHTML; btn.textContent = 'Sending…';
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(form)
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.success) {
+          setStatus("Got it — we'll be in touch within one business day.", 'ok');
+          form.reset();
+          if (window.gtag) gtag('event', 'generate_lead', { method: 'contact_form' });
+          if (window.fbq) fbq('track', 'Lead');
+        } else {
+          setStatus(data.message || 'Something went wrong — email info@veloce-ai.com instead.', 'err');
+        }
+      })
+      .catch(function () { setStatus('Network error — email info@veloce-ai.com instead.', 'err'); })
+      .finally(function () { btn.disabled = false; btn.innerHTML = label; });
+  });
+
+  var book = document.getElementById('bookDemo');
+  if (book) book.addEventListener('click', function () {
+    if (window.gtag) gtag('event', 'book_demo_click');
+    if (window.fbq) fbq('track', 'Schedule');
+  });
+})();
+</script>
+
+<script>
+/* "See it working" — animate the three product surfaces when the section is in view */
+(function(){
+  var section = document.getElementById('atwork');
+  if(!section) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var cards = {};
+  section.querySelectorAll('[data-aw]').forEach(function(c){ cards[c.getAttribute('data-aw')] = c; });
+
+  function runLog(card){
+    var lines = card.querySelectorAll('.aw-line');
+    lines.forEach(function(l){ l.classList.remove('in'); });
+    lines.forEach(function(l,i){ setTimeout(function(){ l.classList.add('in'); }, 350 + i*680); });
+  }
+  function runThread(card){
+    var cust=card.querySelector('.aw-msg.cust'), typing=card.querySelector('[data-typing]'),
+        draft=card.querySelector('[data-draft]'), controls=card.querySelector('[data-controls]'),
+        approve=card.querySelector('.approve');
+    [cust,draft,controls].forEach(function(e){ e.classList.remove('in'); });
+    typing.classList.remove('show'); approve.classList.remove('pulse');
+    setTimeout(function(){ cust.classList.add('in'); }, 350);
+    setTimeout(function(){ typing.classList.add('show'); }, 1150);
+    setTimeout(function(){ typing.classList.remove('show'); draft.classList.add('in'); }, 2700);
+    setTimeout(function(){ controls.classList.add('in'); void approve.offsetWidth; approve.classList.add('pulse'); }, 3400);
+  }
+  function runDash(card){
+    card.querySelectorAll('[data-count]').forEach(function(el){
+      var target=+el.getAttribute('data-count'), suf=el.getAttribute('data-suffix')||'', t0=null, dur=1100;
+      el.textContent='0'+suf;
+      requestAnimationFrame(function step(ts){ if(!t0)t0=ts; var p=Math.min(1,(ts-t0)/dur);
+        el.textContent=Math.round(target*p)+suf; if(p<1) requestAnimationFrame(step); });
+    });
+    var rows=card.querySelectorAll('.aw-row');
+    rows.forEach(function(r){ r.classList.remove('in'); });
+    rows.forEach(function(r,i){ setTimeout(function(){ r.classList.add('in'); }, 500 + i*420); });
+  }
+  function runAll(){ if(cards.log)runLog(cards.log); if(cards.thread)runThread(cards.thread); if(cards.dash)runDash(cards.dash); }
+
+  if(reduce){
+    section.querySelectorAll('.aw-line,.aw-msg,.aw-controls,.aw-row').forEach(function(e){ e.classList.add('in'); });
+    return;
+  }
+  var timer=null;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){ if(!timer){ runAll(); timer=setInterval(runAll, 9000); } }
+      else if(timer){ clearInterval(timer); timer=null; }
+    });
+  },{ threshold:.3 });
+  io.observe(section);
 })();
 </script>
 </body>

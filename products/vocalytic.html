@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vocalytic · AI Conversation &amp; Quality Analyst — Veloce AI FTE-06</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png?v=2026" />
+<meta name="description" content="Vocalytic listens to every call, meeting and brainstorm — in mixed Urdu + English — and turns it into a diarized transcript, a translation, minutes, and a build-ready spec. Today: a working local-GPU voice→spec pipeline. Roadmap: agent scorecards, customer sentiment and a 100%-coverage observability dashboard." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css?v=42" />
+<style>
+/* ===== Vocalytic page-scoped components ===== */
+
+/* Problem strip */
+.pains{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.1rem; margin-top:1.6rem; }
+@media (max-width:960px){ .pains{ grid-template-columns:1fr 1fr; } }
+@media (max-width:560px){ .pains{ grid-template-columns:1fr; } }
+.pain{ padding:1.5rem 1.4rem; }
+.pain .x{ width:38px; height:38px; border-radius:10px; display:grid; place-items:center; font-size:1.05rem;
+  background:rgba(233,75,208,.1); border:1px solid rgba(233,75,208,.32); margin-bottom:.9rem; }
+.pain h4{ font-size:1.02rem; margin-bottom:.35rem; }
+.pain p{ color:var(--fog); font-size:.9rem; }
+
+/* Live transcript workspace mock */
+.tx{ display:grid; grid-template-columns:1.55fr 1fr; gap:1rem; }
+@media (max-width:900px){ .tx{ grid-template-columns:1fr; } }
+.tx-panel{ padding:1.2rem 1.3rem; }
+.tx-head{ display:flex; align-items:center; gap:.55rem; font-family:var(--font-mono); font-size:.74rem;
+  color:var(--muted); letter-spacing:.06em; padding-bottom:.8rem; margin-bottom:.4rem; border-bottom:1px solid var(--line); }
+.tx-head .grow{ margin-left:auto; color:var(--cyan); }
+.tx-tabs{ display:flex; gap:.4rem; flex-wrap:wrap; margin:.7rem 0 .3rem; }
+.tx-tab{ font-family:var(--font-mono); font-size:.66rem; letter-spacing:.05em; padding:.28rem .6rem; border-radius:7px;
+  color:var(--muted); border:1px solid var(--line); }
+.tx-tab.on{ color:#fff; background:var(--ai-grad); border-color:transparent; box-shadow:var(--glow-v); }
+.tx-line{ display:grid; grid-template-columns:auto 1fr; gap:.7rem; padding:.7rem 0; border-bottom:1px dashed var(--line); }
+.tx-line:last-child{ border-bottom:none; }
+.tx-av{ width:30px; height:30px; border-radius:9px; display:grid; place-items:center; font-weight:700; font-size:.78rem;
+  color:#fff; box-shadow:inset 0 0 16px -6px rgba(255,255,255,.5); }
+.tx-av.a{ background:linear-gradient(135deg,#2fe6e0,#1b8f9c); } .tx-av.b{ background:linear-gradient(135deg,#7c5cff,#b23df0); }
+.tx-meta{ display:flex; align-items:baseline; gap:.5rem; margin-bottom:.15rem; }
+.tx-meta .nm{ font-weight:600; font-size:.9rem; } .tx-meta .rl{ font-family:var(--font-mono); font-size:.62rem; color:var(--cyan); }
+.tx-meta .tt{ margin-left:auto; font-family:var(--font-mono); font-size:.64rem; color:var(--muted); }
+.tx-text{ font-size:.9rem; color:var(--fog); } .tx-text b{ color:#fff; }
+.tx-text .sw{ color:#9af6f2; border-bottom:1px dotted rgba(47,230,224,.5); }
+.tx-text.rtl{ direction:rtl; text-align:right; font-size:.96rem; }
+
+/* Pipeline flow */
+.flow{ display:grid; grid-template-columns:repeat(6,1fr); gap:.7rem; margin-top:1.6rem; }
+@media (max-width:960px){ .flow{ grid-template-columns:1fr 1fr 1fr; } }
+@media (max-width:560px){ .flow{ grid-template-columns:1fr 1fr; } }
+.fstep{ padding:1.1rem 1rem; text-align:center; position:relative; }
+.fstep .fn{ font-family:var(--font-mono); font-size:.62rem; color:var(--cyan); letter-spacing:.08em; }
+.fstep h5{ font-size:.92rem; margin:.35rem 0 .25rem; }
+.fstep p{ font-size:.74rem; color:var(--muted); }
+.fstep .tag-live{ margin-top:.55rem; }
+
+/* Analyst crew */
+.crew{ display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-top:1.6rem; }
+@media (max-width:960px){ .crew{ grid-template-columns:1fr 1fr; } }
+@media (max-width:520px){ .crew{ grid-template-columns:1fr; } }
+.agent{ padding:1.5rem 1.35rem; }
+.agent .ic{ width:44px; height:44px; border-radius:11px; background:var(--glass-grad); border:1px solid var(--line-2);
+  display:grid; place-items:center; font-size:1.25rem; margin-bottom:1rem; box-shadow:inset 0 0 20px -8px var(--violet); }
+.agent h4{ font-size:1.05rem; margin-bottom:.3rem; }
+.agent .role{ font-family:var(--font-mono); font-size:.66rem; color:var(--cyan); letter-spacing:.06em; margin-bottom:.6rem; }
+.agent p{ color:var(--fog); font-size:.88rem; }
+
+/* Observability / scorecard preview */
+.obs{ display:grid; grid-template-columns:1.3fr 1fr; gap:1rem; }
+@media (max-width:900px){ .obs{ grid-template-columns:1fr; } }
+.obs-panel{ padding:1.2rem 1.3rem; }
+.kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:.7rem; }
+.kpi{ padding:.85rem .9rem; border:1px solid var(--line); border-radius:12px; background:rgba(255,255,255,.02); }
+.kpi .k{ font-size:.68rem; color:var(--muted); } .kpi .v{ font-family:var(--font-display); font-weight:700; font-size:1.3rem; }
+.kpi .d{ font-family:var(--font-mono); font-size:.62rem; color:#9af6f2; }
+.bars{ margin-top:1rem; display:flex; flex-direction:column; gap:.6rem; }
+.barrow{ display:grid; grid-template-columns:8.5rem 1fr auto; gap:.6rem; align-items:center; font-size:.8rem; }
+.barrow .track{ height:7px; border-radius:5px; background:rgba(255,255,255,.07); overflow:hidden; }
+.barrow .track > i{ display:block; height:100%; border-radius:5px; background:var(--ai-grad); box-shadow:0 0 8px var(--cyan); }
+.barrow .val{ font-family:var(--font-mono); font-size:.72rem; color:var(--fog); }
+/* scorecard */
+.score-top{ display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+.ring{ width:78px; height:78px; border-radius:50%; flex:none; display:grid; place-items:center;
+  background:conic-gradient(var(--cyan) 0 86%, rgba(255,255,255,.09) 86% 100%); }
+.ring > span{ width:60px; height:60px; border-radius:50%; background:var(--void); display:grid; place-items:center;
+  font-family:var(--font-display); font-weight:700; font-size:1.25rem; }
+.score-top .who .nm{ font-weight:600; } .score-top .who .rl{ font-family:var(--font-mono); font-size:.66rem; color:var(--muted); }
+.rub{ display:flex; flex-direction:column; gap:.5rem; }
+.rub .r{ display:grid; grid-template-columns:9rem 1fr auto; gap:.5rem; align-items:center; font-size:.8rem; }
+.rub .r .track{ height:6px; border-radius:5px; background:rgba(255,255,255,.07); overflow:hidden; }
+.rub .r .track > i{ display:block; height:100%; border-radius:5px; background:linear-gradient(90deg,var(--violet),var(--cyan)); }
+.rub .r .n{ font-family:var(--font-mono); font-size:.72rem; }
+
+/* Magic capability grid */
+.magic{ display:grid; grid-template-columns:repeat(5,1fr); gap:.9rem; margin-top:1.6rem; }
+@media (max-width:1000px){ .magic{ grid-template-columns:repeat(3,1fr); } }
+@media (max-width:640px){ .magic{ grid-template-columns:1fr 1fr; } }
+.mcard{ padding:1.15rem 1.1rem; }
+.mcard .mi{ font-size:1.15rem; margin-bottom:.5rem; }
+.mcard h5{ font-size:.92rem; margin-bottom:.25rem; }
+.mcard p{ font-size:.76rem; color:var(--muted); }
+
+/* Reusable framed "app window" for the extracted dark UI panels */
+.shot{ margin-top:1.4rem; border-radius:16px; overflow:hidden; border:1px solid var(--line-2);
+  background:linear-gradient(180deg,#0c1226,#070b16); box-shadow:0 30px 80px -34px rgba(0,0,0,.75); }
+.shot-bar{ display:flex; align-items:center; gap:.7rem; padding:.7rem 1rem; border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.02); }
+.shot-dots{ display:flex; gap:.4rem; }
+.shot-dots i{ width:11px; height:11px; border-radius:50%; display:block; background:var(--line-2); }
+.shot-dots i:nth-child(1){ background:rgba(255,107,107,.55); } .shot-dots i:nth-child(2){ background:rgba(255,180,84,.55); }
+.shot-dots i:nth-child(3){ background:rgba(47,230,224,.55); }
+.shot-title{ font-family:var(--font-mono); font-size:.68rem; color:var(--muted); letter-spacing:.04em; }
+.shot-title .rd{ margin-left:auto; color:var(--amber); }
+.shot-mat{ padding:14px; }
+.shot-mat img{ display:block; width:100%; height:auto; border-radius:12px; }
+.shot-mat.center{ display:grid; place-items:center; }
+.shot-mat.center img{ width:auto; max-width:100%; max-height:520px; }
+.shot-cap{ font-family:var(--font-mono); font-size:.7rem; color:var(--muted); letter-spacing:.05em; margin-top:.7rem; text-align:center; }
+
+.preview-note{ display:inline-flex; align-items:center; gap:.5rem; font-family:var(--font-mono); font-size:.66rem;
+  color:var(--amber); border:1px solid rgba(255,180,84,.35); background:rgba(255,180,84,.08);
+  padding:.3rem .65rem; border-radius:8px; margin-top:1rem; }
+</style>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+<div class="void-base"></div>
+<div class="orbs"><span class="orb c1"></span><span class="orb c2"></span><span class="orb c3"></span></div>
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="../index.html"><img src="../assets/veloce-word-2026.png?v=2026" alt="Veloce-AI" style="height:24px;width:auto;vertical-align:middle" /> <span class="ai">FTE-06</span></a>
+    <div class="nav-links">
+      <a href="../index.html#fleet">The Fleet</a>
+      <a href="../lab.html">The Lab</a>
+      <a href="../index.html#platform">Platform</a>
+      <span class="nav-clock"><span class="dot"></span> MVP · real-audio verified</span>
+    </div>
+    <div class="nav-cta"><a href="../index.html#final" class="btn btn-primary" style="padding:.6rem 1.2rem">Deploy an FTE</a></div>
+    <div class="nav-burger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<header class="hero p-hero">
+  <div class="wrap">
+    <a class="p-back" href="../index.html#fleet">← Back to the fleet</a>
+    <span class="eyebrow reveal">FTE-06 · AI Conversation &amp; Quality Analyst</span>
+    <h1 class="reveal"><span class="ai-grad-text">Vocalytic</span></h1>
+    <p class="sub reveal">Understand every conversation — <b>in any language, at any scale.</b> Vocalytic listens to a call, a meeting or a brainstorm in mixed <b>Urdu&nbsp;+&nbsp;English</b>, works out who said what, and turns it into a clean transcript, a translation, minutes and a build-ready spec — the always-on ear a quality team and a scribe can't be.</p>
+    <div class="p-badges reveal">
+      <span class="tag tag-live"><span class="dot"></span> MVP · real-audio verified</span>
+      <span class="tag">Speech + Voice ID</span>
+      <span class="tag">faster-whisper + pyannote</span>
+      <span class="ai-badge">AI-native 4/5</span>
+      <span class="ai-badge">FTE-fit 4/5</span>
+    </div>
+    <div class="spec-grid reveal">
+      <div class="spec glass"><div class="k">Languages</div><div class="v">UR+EN<small>Code-switch aware</small></div></div>
+      <div class="spec glass"><div class="k">Transcribe</div><div class="v">~14s<small>42s clip · RTX 4050</small></div></div>
+      <div class="spec glass"><div class="k">Privacy</div><div class="v">Local<small>Audio never leaves the box</small></div></div>
+      <div class="spec glass"><div class="k">Pipeline</div><div class="v">6<small>Stages, end-to-end</small></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- WHY IT MATTERS -->
+<section style="padding-top:2.5rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:.4rem">
+      <span class="eyebrow">Why it matters</span>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.6rem);margin:.8rem 0 0">Your biggest dataset is <span class="ai-grad-text">the one nobody logs.</span></h2>
+    </div>
+    <div class="pains">
+      <div class="pain glass reveal"><div class="x">🎧</div><h4>2% gets heard</h4><p>A QA team spot-checks a handful of calls a week. The other 98% — every angry customer, every missed compliance line — is never reviewed.</p></div>
+      <div class="pain glass reveal"><div class="x">📝</div><h4>Minutes go missing</h4><p>Decisions and action items live in someone's memory. By next week nobody agrees on what was actually agreed.</p></div>
+      <div class="pain glass reveal"><div class="x">🌐</div><h4>Language barrier</h4><p>Real conversations are code-switched — Urdu and English in one breath. Off-the-shelf tools garble exactly the moments that matter.</p></div>
+      <div class="pain glass reveal"><div class="x">💡</div><h4>Ideas evaporate</h4><p>The best product idea of the quarter was said out loud in a brainstorm — and lost the moment the call ended.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEE IT WORKING (SHIPPED) -->
+<section style="padding-top:1.6rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:1.4rem"><span class="eyebrow">See it working today · the session workspace</span></div>
+    <div class="tx reveal">
+      <div class="tx-panel glass">
+        <div class="tx-head"><span class="dot"></span> Session · "Water storage management" <span class="grow">2 speakers · diarized</span></div>
+        <div class="tx-tabs">
+          <span class="tx-tab on">Transcript</span><span class="tx-tab">Translation</span><span class="tx-tab">Summary</span><span class="tx-tab">Minutes</span><span class="tx-tab">Lab verdict</span>
+        </div>
+        <div class="tx-line">
+          <div class="tx-av a">SA</div>
+          <div><div class="tx-meta"><span class="nm">Shehzad</span><span class="rl">MATCHED · 0.71</span><span class="tt">00:04</span></div>
+          <div class="tx-text">So the core idea is a smart tank controller — <b>pani ka level</b> automatically <span class="sw">monitor</span> kare, aur logging bhi ho.</div></div>
+        </div>
+        <div class="tx-line">
+          <div class="tx-av b">HB</div>
+          <div><div class="tx-meta"><span class="nm">Hamza</span><span class="rl">MATCHED · 0.68</span><span class="tt">00:12</span></div>
+          <div class="tx-text rtl">ہاں، اور جب لیول لو ہو تو پمپ خود <span class="sw">on</span> کر دے، اور <span class="sw">WhatsApp</span> پر الرٹ بھیجے۔</div></div>
+        </div>
+        <div class="tx-line">
+          <div class="tx-av a">SA</div>
+          <div><div class="tx-meta"><span class="nm">Shehzad</span><span class="rl">MATCHED · 0.71</span><span class="tt">00:20</span></div>
+          <div class="tx-text">Exactly. And we <span class="sw">predict</span> shortages before they happen — usage <span class="sw">history</span> se.</div></div>
+        </div>
+        <div class="tx-line">
+          <div class="tx-av" style="background:linear-gradient(135deg,#3a4049,#20242b)">?</div>
+          <div><div class="tx-meta"><span class="nm" style="color:var(--muted)">Unknown</span><span class="rl" style="color:var(--amber)">BELOW THRESHOLD</span><span class="tt">00:27</span></div>
+          <div class="tx-text" style="color:var(--muted)">Never guesses a speaker — an unmatched voiceprint stays <b style="color:var(--fog)">Unknown</b>.</div></div>
+        </div>
+      </div>
+      <div class="oc-side" style="display:flex;flex-direction:column;gap:1rem">
+        <div class="tx-panel glass">
+          <div class="tx-head">Auto-summary · what was decided</div>
+          <p class="tx-text">A smart water-tank controller that <b>monitors level</b>, auto-runs the pump on a low threshold, sends a WhatsApp alert, and logs usage to <b>forecast shortages</b>.</p>
+        </div>
+        <div class="tx-panel glass">
+          <div class="tx-head">Build-ready spec · extracted</div>
+          <p class="tx-text" style="font-size:.82rem"><b>Problem</b> · manual tank checks, dry-runs.<br><b>MVP</b> · level sensor + pump relay + alert.<br><b>Later</b> · usage forecast, multi-tank.<br><b>Open Q</b> · sensor hardware?</p>
+        </div>
+      </div>
+    </div>
+    <div class="prose reveal" style="margin-top:1.4rem"><p>This is the shipped pipeline, run on a <b>real recorded conversation</b>. Voiceprints are enrolled per speaker, audio is transcribed and diarized on a local GPU, code-switched English is restored to Latin script while Urdu stays Urdu, and the LLM chain translates, summarizes, polishes and evaluates — every artifact kept side by side for traceability.</p></div>
+  </div>
+</section>
+
+<!-- PIPELINE FLOW -->
+<section style="padding-top:2rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:.4rem">
+      <span class="eyebrow">The pipeline · audio in, understanding out</span>
+      <h2 style="font-size:clamp(1.6rem,3vw,2.3rem);margin:.7rem 0 0">Six stages, <span class="ai-grad-text">one conversation.</span></h2>
+      <p style="color:var(--fog);margin-top:.6rem;max-width:64ch">Speech and voice recognition run <b>locally on the GPU</b> — audio never leaves the machine; only the transcript text goes to the provider-agnostic LLM layer.</p>
+    </div>
+    <div class="flow">
+      <div class="fstep glass reveal"><div class="fn">01</div><h5>Enroll</h5><p>Voiceprint per speaker (pyannote embedding)</p><span class="tag tag-live" style="display:inline-block">live</span></div>
+      <div class="fstep glass reveal"><div class="fn">02</div><h5>Transcribe</h5><p>faster-whisper large-v3 + diarization → Name: line</p><span class="tag tag-live" style="display:inline-block">live</span></div>
+      <div class="fstep glass reveal"><div class="fn">03</div><h5>Translate</h5><p>Urdu → English, speaker order preserved</p><span class="tag tag-live" style="display:inline-block">live</span></div>
+      <div class="fstep glass reveal"><div class="fn">04</div><h5>Summarize</h5><p>Faithful recap — no invented conclusions</p><span class="tag tag-live" style="display:inline-block">live</span></div>
+      <div class="fstep glass reveal"><div class="fn">05</div><h5>Polish</h5><p>Reshape into a build-ready brief</p><span class="tag tag-live" style="display:inline-block">live</span></div>
+      <div class="fstep glass reveal"><div class="fn">06</div><h5>Evaluate</h5><p>8-section Lab verdict + AI/FTE scores</p><span class="tag tag-live" style="display:inline-block">live</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TODAY VS ROADMAP -->
+<section style="padding-top:2.2rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:2rem">
+      <span class="eyebrow">What runs today vs. the roadmap</span>
+    </div>
+    <div class="cols">
+      <div class="card live glass reveal">
+        <h3><span class="dot"></span> Running today</h3>
+        <div class="csub">Read and confirmed in source · verified end-to-end on a real recording.</div>
+        <ul class="feat">
+          <li><span class="ck">✦</span><span><b>Speaker enrollment + diarized transcription</b> — pyannote voiceprints match each turn to a name; faster-whisper large-v3 transcribes <b>mixed Urdu&nbsp;+&nbsp;English</b> in ~14s on a laptop GPU. Uncertain voices stay <em>Unknown</em>.</span></li>
+          <li><span class="ck">✦</span><span><b>Code-switch restore</b> — English words Whisper wrote in Urdu script are put back into Latin; Urdu stays Urdu. Text-only, graceful with no LLM.</span></li>
+          <li><span class="ck">✦</span><span><b>Translate → Summarize → Polish → Evaluate</b> — a provider-agnostic LLM chain (OpenAI / Anthropic, set via <code>.env</code>) turns the transcript into an English version, a faithful summary, a build-ready brief and an 8-section Lab verdict.</span></li>
+          <li><span class="ck">✦</span><span><b>Audio-local / text-cloud privacy split</b> — STT and voice ID run on the GPU; only transcript <em>text</em> ever hits the cloud. Any upload (webm / opus / m4a) is ffmpeg-normalized to 16&nbsp;kHz mono.</span></li>
+          <li><span class="ck">✦</span><span><b>Next.js workspace + live recording</b> — enroll, upload or record in-browser (MediaRecorder), watch the diarized transcript, RTL-Urdu bubbles, artifact tabs and score gauges fill in. Stage is derived from the artifacts that exist, so it never desyncs.</span></li>
+        </ul>
+      </div>
+      <div class="card road glass reveal">
+        <h3><span class="dot amber"></span> On the roadmap</h3>
+        <div class="csub">The analysis &amp; observability layer — not shipped, never demoed as live.</div>
+        <ul class="feat">
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Call-center QA</b> — score every agent against a rubric (communication, empathy, resolution, compliance), gauge customer sentiment and escalation risk, flag missed disclosures.</span></li>
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Automatic minutes &amp; action items</b> — decisions, owners and follow-ups extracted from any meeting and pushed to the tools you already use.</span></li>
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Observability dashboard</b> — 100% coverage: CSAT, first-call-resolution, handle time, talk/listen ratio, topic and sentiment trends, a QA leaderboard across the whole team.</span></li>
+          <li><span class="ck" style="color:var(--amber)">◆</span><span><b>Autonomous &amp; real-time</b> — a silence/keyword "finished" trigger for hands-free runs, live streaming captions, auto-follow-ups, alerts, and CRM / helpdesk / calendar integrations.</span></li>
+        </ul>
+        <p class="honest-note">Honesty note: today Vocalytic <em>transcribes, translates and summarizes</em> — genuinely, on real audio. The scoring, sentiment, CSAT and dashboards below are the <b>vision layer</b>: treat every number in them as a synthetic target, not a shipped metric.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANALYST CREW -->
+<section style="padding-top:2rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:.4rem">
+      <span class="eyebrow">The roadmap · the analyst crew</span>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.6rem);margin:.8rem 0 0">Four AI FTEs, <span class="ai-grad-text">on every conversation.</span></h2>
+      <p style="color:var(--fog);margin-top:.7rem;max-width:62ch">Each agent owns a slice of the work a quality team and a scribe do by hand — labeled roadmap, human-in-command before anything is scored or sent.</p>
+    </div>
+    <div class="crew">
+      <div class="agent glass reveal"><div class="ic">🖋</div><h4>Scribe FTE</h4><div class="role">CAPTURE · MINUTE</div><p>Transcribes and diarizes every call and meeting, then drafts the minutes — decisions, action items and owners — before anyone leaves the room.</p></div>
+      <div class="agent glass reveal"><div class="ic">🎯</div><h4>Auditor FTE</h4><div class="role">SCORE · COACH</div><p>Rates every agent call against your rubric, spots the coachable moment, and writes the feedback tip — quality review at 100% coverage, not 2%.</p></div>
+      <div class="agent glass reveal"><div class="ic">💓</div><h4>Pulse FTE</h4><div class="role">SENSE · FLAG</div><p>Gauges customer sentiment and escalation risk turn by turn, and raises a real-time flag on anger, churn cues or a compliance breach.</p></div>
+      <div class="agent glass reveal"><div class="ic">⚙</div><h4>Forge FTE</h4><div class="role">IDEATE · SPEC</div><p>Turns a spoken brainstorm into a build-ready spec — problem, MVP, nice-to-haves, open questions — ready to drop into the Lab.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- OBSERVABILITY + SCORECARD PREVIEW (ROADMAP) -->
+<section style="padding-top:2rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:1.4rem">
+      <span class="eyebrow">Roadmap preview · the real-time workspace &amp; observability</span>
+    </div>
+    <div class="shot reveal" style="margin-bottom:1.4rem">
+      <div class="shot-bar"><span class="shot-dots"><i></i><i></i><i></i></span><span class="shot-title">vocalytic://live-session — real-time experience<span class="rd">design preview · roadmap</span></span></div>
+      <div class="shot-mat"><img src="../assets/voc-live-ui.png?v=1" alt="Vocalytic real-time workspace design preview — a live meeting transcript with four detected speakers in mixed languages, tabs for transcript / translation / summary / insights / minutes, and a live AI-insights panel showing top topics, sentiment and action items." loading="lazy" /></div>
+    </div>
+    <div class="obs reveal">
+      <div class="obs-panel glass">
+        <div class="tx-head"><span class="dot amber"></span> Team dashboard <span class="grow" style="color:var(--amber)">synthetic preview</span></div>
+        <div class="kpis" style="margin-top:.4rem">
+          <div class="kpi"><div class="k">Calls analyzed</div><div class="v">1,248</div><div class="d">100% coverage</div></div>
+          <div class="kpi"><div class="k">Avg CSAT</div><div class="v">4.6<span style="font-size:.8rem;color:var(--muted)">/5</span></div><div class="d">▲ 5.1%</div></div>
+          <div class="kpi"><div class="k">First-call res.</div><div class="v">68%</div><div class="d">▲ 7.3%</div></div>
+        </div>
+        <div class="bars">
+          <div class="barrow"><span>Billing issues</span><span class="track"><i style="width:80%"></i></span><span class="val">35%</span></div>
+          <div class="barrow"><span>Refunds</span><span class="track"><i style="width:64%"></i></span><span class="val">28%</span></div>
+          <div class="barrow"><span>Product info</span><span class="track"><i style="width:42%"></i></span><span class="val">18%</span></div>
+          <div class="barrow"><span>Tech support</span><span class="track"><i style="width:27%"></i></span><span class="val">12%</span></div>
+        </div>
+      </div>
+      <div class="obs-panel glass">
+        <div class="tx-head"><span class="dot amber"></span> Agent scorecard <span class="grow" style="color:var(--amber)">synthetic preview</span></div>
+        <div class="score-top" style="margin-top:.5rem">
+          <div class="ring"><span>4.3</span></div>
+          <div class="who"><div class="nm">Agent · sample</div><div class="rl">142 calls · this month</div></div>
+        </div>
+        <div class="rub">
+          <div class="r"><span class="n">Communication</span><span class="track"><i style="width:92%"></i></span><span class="n">4.6</span></div>
+          <div class="r"><span class="n">Empathy</span><span class="track"><i style="width:84%"></i></span><span class="n">4.2</span></div>
+          <div class="r"><span class="n">Resolution</span><span class="track"><i style="width:88%"></i></span><span class="n">4.4</span></div>
+          <div class="r"><span class="n">Compliance</span><span class="track"><i style="width:82%"></i></span><span class="n">4.1</span></div>
+          <div class="r"><span class="n">Hold time</span><span class="track"><i style="width:80%"></i></span><span class="n">4.0</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="preview-note reveal">⚠ Roadmap preview — every figure here is synthetic sample data, not a shipped Vocalytic metric.</div>
+  </div>
+</section>
+
+<!-- MAGIC GRID -->
+<section style="padding-top:2.2rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:.4rem">
+      <span class="eyebrow">Where it goes · the magic</span>
+      <h2 style="font-size:clamp(1.6rem,3vw,2.3rem);margin:.7rem 0 0">Not a tool — <span class="ai-grad-text">an AI co-pilot for every conversation.</span></h2>
+    </div>
+    <div class="magic">
+      <div class="mcard glass reveal"><div class="mi">🛡</div><h5>Autonomous QA</h5><p>Reviews 100% of interactions and flags risk &amp; opportunity.</p></div>
+      <div class="mcard glass reveal"><div class="mi">🎓</div><h5>Smart Coaching</h5><p>Agents get personalized feedback and tips, per call.</p></div>
+      <div class="mcard glass reveal"><div class="mi">🔔</div><h5>Real-time Alerts</h5><p>Compliance breaches, anger and escalations, instantly.</p></div>
+      <div class="mcard glass reveal"><div class="mi">📣</div><h5>Voice of Customer</h5><p>Surface trends, pain points and product feedback at scale.</p></div>
+      <div class="mcard glass reveal"><div class="mi">🔀</div><h5>Process Mining</h5><p>Find the bottlenecks and optimize the flow of a call.</p></div>
+      <div class="mcard glass reveal"><div class="mi">📈</div><h5>FTE Productivity</h5><p>Measure utilization, quality, occupancy and efficiency.</p></div>
+      <div class="mcard glass reveal"><div class="mi">⚡</div><h5>Speed of Service</h5><p>Track response time, resolution time and SLA performance.</p></div>
+      <div class="mcard glass reveal"><div class="mi">🔒</div><h5>Risk &amp; Compliance</h5><p>Detect PII, sensitive data and policy violations.</p></div>
+      <div class="mcard glass reveal"><div class="mi">🔄</div><h5>Auto Follow-ups</h5><p>Draft the emails, case notes and next tasks automatically.</p></div>
+      <div class="mcard glass reveal"><div class="mi">🌍</div><h5>Global Ready</h5><p>Multi-language, multi-accent, multi-channel by design.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM VISION BANNER (extracted §1 orb panel) -->
+<section style="padding-top:2.2rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:.6rem">
+      <span class="eyebrow">The vision · one platform</span>
+      <h2 style="font-size:clamp(1.6rem,3vw,2.3rem);margin:.7rem 0 0">Every conversation type, <span class="ai-grad-text">every language.</span></h2>
+    </div>
+    <div class="shot reveal">
+      <div class="shot-bar"><span class="shot-dots"><i></i><i></i><i></i></span><span class="shot-title">vocalytic://platform — understand every conversation, in any language, at any scale</span></div>
+      <div class="shot-mat center"><img src="../assets/voc-hero-orb.png?v=1" alt="Vocalytic platform — understand every conversation in any language at any scale: transcribe, translate, analyze, summarize, evaluate; working across group discussions, call-center calls, client meetings, webinars, sales calls and support chats, in Urdu, English and beyond." loading="lazy" /></div>
+    </div>
+    <p class="shot-cap">One platform across group discussions, call-centre calls, meetings, webinars and support chats. The shipped slice is the transcribe → translate → summarize → spec spine; the scoring, sentiment and dashboards are the roadmap.</p>
+  </div>
+</section>
+
+<!-- ROLE IT REPLACES -->
+<section style="padding-top:2.2rem">
+  <div class="wrap">
+    <div class="replaces glass reveal">
+      <div>
+        <span class="eyebrow">The role it replaces</span>
+        <h3>A QA analyst — and the meeting scribe.</h3>
+        <p>The analyst who can only sample a fraction of calls, and the note-taker who misses half the room. Vocalytic hears every second of every conversation, in the language it was actually spoken, and never files it late — human-in-command before anything is scored or sent.</p>
+      </div>
+      <div class="big ai-grad-text">100%<small>of calls heard · vs a ~2% human sample</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- BUSINESS CASE -->
+<section style="padding-top:1.4rem">
+  <div class="wrap">
+    <div class="section-head left reveal" style="margin-bottom:1.4rem"><span class="eyebrow">The business case</span></div>
+    <div class="demo-card glass reveal" style="padding:2rem">
+      <p class="prose" style="margin:0"><b style="color:#fff">Conversations are the largest un-instrumented dataset a company owns.</b> Every call, meeting and brainstorm carries the truth about your customers, your agents and your next product — and almost none of it is logged, scored or searchable. Vocalytic makes it observable: it starts today as a working voice→spec pipeline that already handles the hard part — mixed-language audio, on-device, with speakers named — and grows into the analyst that reviews <em>every</em> conversation for quality, sentiment, compliance and speed of service.</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap"><div class="pager">
+    <a href="vision-alert.html">← FTE-05 AI Security Guard</a>
+    <a href="../index.html#fleet">All six FTEs →</a>
+  </div></div>
+</section>
+
+<footer>
+  <div class="wrap"><div class="foot-bottom" style="border:none;margin:0;padding:0">
+    <span>© 2026 Veloce AI · Vocalytic dossier</span>
+    <span>Fleet online · <span data-clock>00:00:00</span> · <span class="dot" style="display:inline-block"></span></span>
+  </div></div>
+</footer>
+
+<script src="../assets/app.js?v=42"></script>
+</body>
+</html>
