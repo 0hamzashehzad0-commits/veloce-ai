@@ -1,4 +1,4 @@
-# Veloce-AI · v0.2
+# Veloce-AI · v0.4
 
 The showcase site for **Veloce AI — The Restless Workforce**: autonomous Full-Time-Equivalent
 AI workers that own a job end-to-end and run 24/7.
